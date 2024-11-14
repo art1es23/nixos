@@ -47,24 +47,18 @@
         _FXSortFoldersFirst = true;
         ShowPathbar = true;
       };
-      magicmouse = {
-        MouseButtonMode = "OneButton";
-      };
-      trackpad = {
-        TrackpadThreeFingerDrag = true;
-      };
-      menuExtraClock = {
-        Show24Hour = true;
-      };
-      loginwindow = {
-        LoginwindowText = "qmpwwsd <code>";
-      };
-      screencapture = {
-        location = "~/Pictures/screenshots";
-      };
-      screensaver = {
-        askForPasswordDelay = 10;
-      };
+      # magicmouse = {
+      #   MouseButtonMode = "OneButton";
+      # };
+      # trackpad = {
+      #   TrackpadThreeFingerDrag = true;
+      # };
+      # menuExtraClock = {
+      #   Show24Hour = true;
+      # };
+      # screencapture = {
+      #   location = "~/Pictures/screenshots";
+      # };
     };
   };
 
