@@ -12,14 +12,13 @@
     brews = [
       "mas"
       "imagemagick"
-      # "sketchybar"
     ];
 
     casks = [
       # NOTE: Homerow isn't available as a cask yet
 
-      "1password"
-      "nordpass"
+      # "1password"
+      # "nordpass"
 
       # Loosely, social platforms
       "discord"
@@ -53,14 +52,14 @@
       "appcleaner"
       "shottr"
       "keka"
-      "cursorcerer"
+      # "cursorcerer"
       "transmission"
       "plover"
 
       # Additional
       "spotify"
       "binance"
-      "meetingbar" # shows upcoming meetings
+      # "meetingbar" # shows upcoming meetings
       "eul" # mac monitoring
       "wireshark" # network sniffer
       "keycastr" # show keystrokes on screen
@@ -72,8 +71,6 @@
 
     taps = [
       # default
-      # "homebrew/bundle"
-      # "FelixKratz/formulae"
     ];
   };
 }
