@@ -10,7 +10,7 @@
     # shells = [ pkgs.bash pkgs.zsh ];
     # loginShell = pkgs.zsh;
     systemPackages = with pkgs; [
-      # kitty
+      kitty
       aerospace
       jankyborders
       sketchybar

@@ -3,7 +3,7 @@
   programs.git = {
     enable = true;
     userName = "qmpwwsd";
-    userEmail = "dreamwinamounts@gmail.com";
+    userEmail = "dreamwinamounts.dev@gmail.com";
     extraConfig = {
       init.defaultBranch = "master";
       core = {

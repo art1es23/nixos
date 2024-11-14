@@ -2,12 +2,12 @@
 
 {
   imports = [
-    # ./bat
+    ./bat
     ./kitty
-    # ./nvim
+    ./nvim
     # ./tmux
-    # ./yazi
-    # ./zsh
+    ./yazi
+    ./zsh
     # ./ssh
   ];
 }

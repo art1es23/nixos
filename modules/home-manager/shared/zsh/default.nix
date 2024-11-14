@@ -12,12 +12,6 @@ in
 {
   programs.zsh = {
     enable = true;
-    # enableCompletion = true;
-    # syntaxHighlighting.enable = true;
-    # shellAliases = {
-    # 	v = "nvim";
-    # };
-
     envExtra = ''
       ZDOTDIR="${config.home.homeDirectory}/.config/zsh"
       alias rnix="${systemSpecificRebuildCmd} switch --flake /etc/nixos --impure"

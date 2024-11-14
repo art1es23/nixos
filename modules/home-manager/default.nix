@@ -7,8 +7,8 @@
 
 {
   imports = [
-    # (./. + "/hosts/${hostname}")
-    # (./. + "/users/${username}.nix")
+    (./. + "/hosts/${hostname}")
+    (./. + "/users/${username}.nix")
     ./shared
     # inputs.nix-colors.homeManagerModules.default
   ];
@@ -17,7 +17,6 @@
 
   home = {
     username = username;
-    # homeDirectory = "/Users/${username}";
     enableNixpkgsReleaseCheck = false;
     stateVersion = "24.05";
     sessionVariables = {
