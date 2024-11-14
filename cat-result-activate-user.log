@@ -1,0 +1,1350 @@
+~/nixos█                                                                                                                                                                               master    󰄸    
+  nix build .#darwinConfigurations.qmpwwsd.system
+
+~/nixos█                                                                                                                                                                         master   !1 󰄸    11s 
+  cat result/activate-user
+
+#! /nix/store/rj7zvmif800bgg3sbznq6g5g438jx104-bash-5.2p37/bin/bash
+set -e
+set -o pipefail
+export PATH="/nix/store/fay4393fknlsn89l6ifzk4m3pfwbxk0a-gnugrep-3.11/bin:/nix/store/4axvrmlyszz77x66am0damj6pz4jh683-coreutils-9.5/bin:/nix/store/kjhpp8hyz0x5257nqjfhx9cmfkch5mi0-darwin-system-24.11.20241109.76612b1+darwin5.6c71c49/sw/bin:/usr/bin:/bin"
+
+systemConfig=/nix/store/kjhpp8hyz0x5257nqjfhx9cmfkch5mi0-darwin-system-24.11.20241109.76612b1+darwin5.6c71c49
+
+_status=0
+trap "_status=1" ERR
+
+# Ensure a consistent umask.
+umask 0022
+
+
+
+# This should be running at the system level, but as user activation runs first
+# we run it here with sudo
+if [[ ! -L /run ]]; then
+  # This file doesn't exist by default on macOS and is only supported after 10.15
+  # however every system with Nix installed should have this file otherwise `/nix`
+  # wouldn't exist.
+  if [[ -e /etc/synthetic.conf ]]; then
+    if ! grep -q '^run\b' /etc/synthetic.conf 2>/dev/null; then
+      echo "setting up /run via /etc/synthetic.conf..."
+      printf 'run\tprivate/var/run\n' | sudo tee -a /etc/synthetic.conf >/dev/null
+    fi
+
+    # for Catalina (10.15)
+    sudo /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -B &>/dev/null || true
+    # for Big Sur (11.0)
+    sudo /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t &>/dev/null || true
+
+    if [[ ! -L /run ]]; then
+      printf >&2 'error: apfs.util failed to symlink /run, aborting activation\n'
+      printf >&2 'To create a symlink from /run to /var/run, please run:\n'
+      printf >&2 '\n'
+      printf >&2 "$ printf 'run\tprivate/var/run\n' | sudo tee -a /etc/synthetic.conf"
+      printf >&2 '$ sudo /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -B # For Catalina\n'
+      printf >&2 '$ sudo /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t # For Big Sur and later\n' >&2
+      printf >&2 '\n'
+      printf >&2 'The current contents of /etc/synthetic.conf is:\n'
+      printf >&2 '\n'
+      sudo sed 's/^/    /' /etc/synthetic.conf >&2
+      printf >&2 '\n'
+      exit 1
+    fi
+  else
+    echo "setting up /run..."
+    sudo ln -sfn private/var/run /run
+
+    if [[ ! -L /run ]]; then
+      printf >&2 'error: failed to symlink /run, aborting activation\n'
+      printf >&2 'To create a symlink from /run to /var/run, please run:\n'
+      printf >&2 '\n'
+      printf >&2 '$ sudo ln -sfn private/var/link /run\n'
+      exit 1
+    fi
+  fi
+fi
+
+darwinChanges=/dev/null
+if test -e /run/current-system/darwin-changes; then
+  darwinChanges=/run/current-system/darwin-changes
+fi
+
+darwinChanges=$(diff --changed-group-format='%>' --unchanged-group-format= /run/current-system/darwin-changes $systemConfig/darwin-changes 2> /dev/null) || true
+if test -n "$darwinChanges"; then
+  echo >&2
+  echo "CHANGELOG" >&2
+  echo >&2
+  echo "$darwinChanges" >&2
+  echo >&2
+fi
+
+if [[ ! -e /run ]]; then
+  printf >&2 'error: directory /run does not exist, aborting activation\n'
+  exit 1
+fi
+
+buildUser=$(dscl . -read /Groups/nixbld GroupMembership 2>&1 | awk '/^GroupMembership: / {print $2}') || true
+if [[ -z "$buildUser" ]]; then
+    echo "error: Using the nix-daemon requires build users, aborting activation" >&2
+    echo "Create the build users or disable the daemon:" >&2
+    echo "$ darwin-install" >&2
+    echo >&2
+    echo "or set (this requires some manual intervention to restore permissions)" >&2
+    echo >&2
+    echo "    services.nix-daemon.enable = false;" >&2
+    echo >&2
+    exit 2
+fi
+
+# Don’t complain when we’re about to migrate old‐style build users…
+if ! dscl . -list /Users | grep -q '^nixbld'; then
+
+firstBuildUserID=$(dscl . -read /Users/_nixbld1 UniqueID | awk '{print $2}')
+if [[ $firstBuildUserID != 351 ]]; then
+    printf >&2 '\e[1;31merror: Build users have unexpected UIDs, aborting activation\e[0m\n'
+    printf >&2 'The default Nix build user ID range has been adjusted for\n'
+    printf >&2 'compatibility with macOS Sequoia 15. Your _nixbld1 user currently has\n'
+    printf >&2 'UID %d rather than the new default of 351.\n' "$firstBuildUserID"
+    printf >&2 '\n'
+    printf >&2 'You can automatically migrate the users with the following command:\n'
+    printf >&2 '\n'
+    if [[ -e /nix/receipt.json ]]; then
+        if
+            /nix/store/mx6zrpgk9ncxmdkriivad29g6ms54lp4-jq-1.7.1-bin/bin/jq --exit-status \
+            'try(.planner.settings | has("enable_flakes"))' \
+            /nix/receipt.json \
+            >/dev/null
+        then
+            installerUrl="https://install.lix.systems/lix"
+        else
+            installerUrl="https://install.determinate.systems/nix"
+        fi
+        printf >&2 "    curl --proto '=https' --tlsv1.2 -sSf -L %s | sh -s -- repair sequoia --move-existing-users\n" \
+            "$installerUrl"
+    else
+        printf >&2 "    curl --proto '=https' --tlsv1.2 -sSf -L https://github.com/NixOS/nix/raw/master/scripts/sequoia-nixbld-user-migration.sh | bash -\n"
+    fi
+    printf >&2 '\n'
+    printf >&2 'If you have no intention of upgrading to macOS Sequoia 15, or already\n'
+    printf >&2 'have a custom UID range that you know is compatible with Sequoia, you\n'
+    printf >&2 'can disable this check by setting:\n'
+    printf >&2 '\n'
+    printf >&2 '    ids.uids.nixbld = %d;\n' "$((firstBuildUserID - 1))"
+    printf >&2 '\n'
+    exit 2
+fi
+fi
+
+buildGroupID=$(dscl . -read /Groups/nixbld PrimaryGroupID | awk '{print $2}')
+expectedBuildGroupID=350
+if [[ $buildGroupID != "$expectedBuildGroupID" ]]; then
+    printf >&2 '\e[1;31merror: Build user group has mismatching GID, aborting activation\e[0m\n'
+    printf >&2 'The default Nix build user group ID was changed from 30000 to 350.\n'
+    printf >&2 'You are currently managing Nix build users with nix-darwin, but your\n'
+    printf >&2 'nixbld group has GID %d, whereas we expected %d.\n' \
+      "$buildGroupID" "$expectedBuildGroupID"
+    printf >&2 '\n'
+    printf >&2 'Possible causes include setting up a new Nix installation with an\n'
+    printf >&2 'existing nix-darwin configuration, setting up a new nix-darwin\n'
+    printf >&2 'installation with an existing Nix installation, or manually increasing\n'
+    # shellcheck disable=SC2016
+    printf >&2 'your `system.stateVersion` setting.\n'
+    printf >&2 '\n'
+    printf >&2 'You can set the configured group ID to match the actual value:\n'
+    printf >&2 '\n'
+    printf >&2 '    ids.gids.nixbld = %d;\n' "$buildGroupID"
+    printf >&2 '\n'
+    printf >&2 'We do not recommend trying to change the group ID with macOS user\n'
+    printf >&2 'management tools without a complete uninstallation and reinstallation\n'
+    printf >&2 'of Nix.\n'
+    exit 2
+fi
+
+if test -w /nix/var/nix/db -a ! -O /nix/store; then
+    echo >&2 "error: the store is not owned by this user, but /nix/var/nix/db is writable"
+    echo >&2 "If you are using the daemon:"
+    echo >&2
+    echo >&2 "    sudo chown -R root:wheel /nix/var/nix/db"
+    echo >&2
+    echo >&2 "Otherwise:"
+    echo >&2
+    echo >&2 "    sudo chown -R $USER:staff /nix/store"
+    echo >&2
+    exit 2
+fi
+
+channelsLink=$(readlink "$HOME/.nix-defexpr/channels") || true
+case "$channelsLink" in
+  *"$USER"*)
+    ;;
+  "")
+    ;;
+  *)
+    echo "error: The ~/.nix-defexpr/channels symlink does not point your users channels, aborting activation" >&2
+    echo "Running nix-channel will regenerate it" >&2
+    echo >&2
+    echo "    rm ~/.nix-defexpr/channels" >&2
+    echo "    nix-channel --update" >&2
+    echo >&2
+    exit 2
+    ;;
+esac
+
+if grep -q 'etc/profile.d/nix-daemon.sh' /etc/profile; then
+    echo "error: Found nix-daemon.sh reference in /etc/profile, aborting activation" >&2
+    echo "This will override options like nix.nixPath because it runs later," >&2
+    echo "remove this snippet from /etc/profile:" >&2
+    echo >&2
+    echo "    # Nix" >&2
+    echo "    if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then" >&2
+    echo "      . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'" >&2
+    echo "    fi" >&2
+    echo "    # End Nix" >&2
+    echo >&2
+    exit 2
+fi
+
+if [[ -d /etc/ssh/authorized_keys.d ]]; then
+    printf >&2 '\e[1;31merror: /etc/ssh/authorized_keys.d exists, aborting activation\e[0m\n'
+    printf >&2 'SECURITY NOTICE: The previous implementation of the\n'
+    # shellcheck disable=SC2016
+    printf >&2 '`users.users.<name>.openssh.authorizedKeys.*` options would not delete\n'
+    printf >&2 'authorized keys files when the setting for a given user was removed.\n'
+    printf >&2 '\n'
+    printf >&2 "This means that if you previously stopped managing a user's authorized\n"
+    printf >&2 'SSH keys with nix-darwin, or intended to revoke their access by\n'
+    printf >&2 'removing the option, the previous set of keys could still be used to\n'
+    printf >&2 'log in as that user.\n'
+    printf >&2 '\n'
+    printf >&2 'You can check the /etc/ssh/authorized_keys.d directory to see which\n'
+    printf >&2 'keys were permitted; afterwards, please remove the directory and\n'
+    printf >&2 're-run activation. The options continue to be supported and will now\n'
+    printf >&2 'correctly permit only the keys in your current system configuration.\n'
+    exit 2
+fi
+
+if [[ ! -f /opt/homebrew/bin/brew ]]; then
+    echo "error: Using the homebrew module requires homebrew installed, aborting activation" >&2
+    echo "Homebrew doesn't seem to be installed. Please install homebrew separately." >&2
+    echo "You can install homebrew using the following command:" >&2
+    echo >&2
+    # shellcheck disable=SC2016
+    echo '    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"' >&2
+    echo >&2
+    exit 2
+fi
+
+ensurePerms() {
+  homeDirectory=$(dscl . -read /Users/nobody NFSHomeDirectory)
+  homeDirectory=${homeDirectory#NFSHomeDirectory: }
+
+  if ! sudo dscl . -change /Users/nobody NFSHomeDirectory "$homeDirectory" "$homeDirectory" &> /dev/null; then
+    if [[ -n "$SSH_CONNECTION" ]]; then
+      printf >&2 '\e[1;31merror: users cannot be %s over SSH without Full Disk Access, aborting activation\e[0m\n' "$2"
+      # shellcheck disable=SC2016
+      printf >&2 'The user %s could not be %s as `darwin-rebuild` was not executed with Full Disk Access over SSH.\n' "$1" "$2"
+      printf >&2 'You can either:\n'
+      printf >&2 '\n'
+      printf >&2 '  grant Full Disk Access to all programs run over SSH\n'
+      printf >&2 '\n'
+      printf >&2 'or\n'
+      printf >&2 '\n'
+      # shellcheck disable=SC2016
+      printf >&2 '  run `darwin-rebuild` in a graphical session.\n'
+      printf >&2 '\n'
+      printf >&2 'The option "Allow full disk access for remote users" can be found by\n'
+      printf >&2 'navigating to System Settings > General > Sharing > Remote Login\n'
+      printf >&2 'and then pressing on the i icon next to the switch.\n'
+      exit 1
+    else
+      # The TCC service required to change home directories is `kTCCServiceSystemPolicySysAdminFiles`
+      # and we can reset it to ensure the user gets another prompt
+      tccutil reset SystemPolicySysAdminFiles > /dev/null
+
+      if ! sudo dscl . -change /Users/nobody NFSHomeDirectory "$homeDirectory" "$homeDirectory" &> /dev/null; then
+        printf >&2 '\e[1;31merror: permission denied when trying to %s user %s, aborting activation\e[0m\n' "$2" "$1"
+        # shellcheck disable=SC2016
+        printf >&2 '`darwin-rebuild` requires permissions to administrate your computer,\n'
+        printf >&2 'please accept the dialog that pops up.\n'
+        printf >&2 '\n'
+        # shellcheck disable=SC2016
+        printf >&2 'If you do not wish to be prompted every time `darwin-rebuild updates your users,\n'
+        printf >&2 'you can grant Full Disk Access to your terminal emulator in System Settings.\n'
+        printf >&2 '\n'
+        printf >&2 'This can be found in System Settings > Privacy & Security > Full Disk Access.\n'
+        exit 1
+      fi
+    fi
+
+  fi
+}
+
+u=$(id -u _nixbld1 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "351" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld1 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld2 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "352" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld2 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld3 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "353" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld3 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld4 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "354" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld4 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld5 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "355" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld5 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld6 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "356" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld6 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld7 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "357" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld7 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld8 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "358" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld8 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld9 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "359" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld9 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld10 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "360" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld10 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld11 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "361" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld11 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld12 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "362" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld12 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld13 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "363" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld13 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld14 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "364" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld14 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld15 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "365" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld15 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld16 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "366" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld16 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld17 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "367" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld17 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld18 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "368" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld18 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld19 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "369" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld19 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld20 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "370" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld20 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld21 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "371" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld21 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld22 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "372" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld22 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld23 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "373" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld23 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld24 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "374" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld24 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld25 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "375" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld25 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld26 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "376" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld26 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld27 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "377" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld27 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld28 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "378" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld28 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld29 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "379" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld29 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld30 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "380" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld30 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld31 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "381" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld31 create
+
+    
+  fi
+fi
+
+u=$(id -u _nixbld32 2> /dev/null) || true
+if ! [[ -n "$u" && "$u" -ne "382" ]]; then
+  if [ -z "$u" ]; then
+    ensurePerms _nixbld32 create
+
+    
+  fi
+fi
+
+
+u=$(id -u nixbld1 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld1 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld1
+      exit 1
+    fi
+
+    ensurePerms nixbld1 delete
+  fi
+fi
+
+u=$(id -u nixbld10 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld10 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld10
+      exit 1
+    fi
+
+    ensurePerms nixbld10 delete
+  fi
+fi
+
+u=$(id -u nixbld11 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld11 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld11
+      exit 1
+    fi
+
+    ensurePerms nixbld11 delete
+  fi
+fi
+
+u=$(id -u nixbld12 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld12 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld12
+      exit 1
+    fi
+
+    ensurePerms nixbld12 delete
+  fi
+fi
+
+u=$(id -u nixbld13 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld13 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld13
+      exit 1
+    fi
+
+    ensurePerms nixbld13 delete
+  fi
+fi
+
+u=$(id -u nixbld14 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld14 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld14
+      exit 1
+    fi
+
+    ensurePerms nixbld14 delete
+  fi
+fi
+
+u=$(id -u nixbld15 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld15 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld15
+      exit 1
+    fi
+
+    ensurePerms nixbld15 delete
+  fi
+fi
+
+u=$(id -u nixbld16 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld16 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld16
+      exit 1
+    fi
+
+    ensurePerms nixbld16 delete
+  fi
+fi
+
+u=$(id -u nixbld17 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld17 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld17
+      exit 1
+    fi
+
+    ensurePerms nixbld17 delete
+  fi
+fi
+
+u=$(id -u nixbld18 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld18 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld18
+      exit 1
+    fi
+
+    ensurePerms nixbld18 delete
+  fi
+fi
+
+u=$(id -u nixbld19 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld19 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld19
+      exit 1
+    fi
+
+    ensurePerms nixbld19 delete
+  fi
+fi
+
+u=$(id -u nixbld2 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld2 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld2
+      exit 1
+    fi
+
+    ensurePerms nixbld2 delete
+  fi
+fi
+
+u=$(id -u nixbld20 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld20 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld20
+      exit 1
+    fi
+
+    ensurePerms nixbld20 delete
+  fi
+fi
+
+u=$(id -u nixbld21 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld21 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld21
+      exit 1
+    fi
+
+    ensurePerms nixbld21 delete
+  fi
+fi
+
+u=$(id -u nixbld22 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld22 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld22
+      exit 1
+    fi
+
+    ensurePerms nixbld22 delete
+  fi
+fi
+
+u=$(id -u nixbld23 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld23 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld23
+      exit 1
+    fi
+
+    ensurePerms nixbld23 delete
+  fi
+fi
+
+u=$(id -u nixbld24 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld24 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld24
+      exit 1
+    fi
+
+    ensurePerms nixbld24 delete
+  fi
+fi
+
+u=$(id -u nixbld25 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld25 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld25
+      exit 1
+    fi
+
+    ensurePerms nixbld25 delete
+  fi
+fi
+
+u=$(id -u nixbld26 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld26 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld26
+      exit 1
+    fi
+
+    ensurePerms nixbld26 delete
+  fi
+fi
+
+u=$(id -u nixbld27 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld27 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld27
+      exit 1
+    fi
+
+    ensurePerms nixbld27 delete
+  fi
+fi
+
+u=$(id -u nixbld28 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld28 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld28
+      exit 1
+    fi
+
+    ensurePerms nixbld28 delete
+  fi
+fi
+
+u=$(id -u nixbld29 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld29 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld29
+      exit 1
+    fi
+
+    ensurePerms nixbld29 delete
+  fi
+fi
+
+u=$(id -u nixbld3 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld3 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld3
+      exit 1
+    fi
+
+    ensurePerms nixbld3 delete
+  fi
+fi
+
+u=$(id -u nixbld30 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld30 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld30
+      exit 1
+    fi
+
+    ensurePerms nixbld30 delete
+  fi
+fi
+
+u=$(id -u nixbld31 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld31 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld31
+      exit 1
+    fi
+
+    ensurePerms nixbld31 delete
+  fi
+fi
+
+u=$(id -u nixbld32 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld32 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld32
+      exit 1
+    fi
+
+    ensurePerms nixbld32 delete
+  fi
+fi
+
+u=$(id -u nixbld4 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld4 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld4
+      exit 1
+    fi
+
+    ensurePerms nixbld4 delete
+  fi
+fi
+
+u=$(id -u nixbld5 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld5 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld5
+      exit 1
+    fi
+
+    ensurePerms nixbld5 delete
+  fi
+fi
+
+u=$(id -u nixbld6 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld6 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld6
+      exit 1
+    fi
+
+    ensurePerms nixbld6 delete
+  fi
+fi
+
+u=$(id -u nixbld7 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld7 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld7
+      exit 1
+    fi
+
+    ensurePerms nixbld7 delete
+  fi
+fi
+
+u=$(id -u nixbld8 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld8 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld8
+      exit 1
+    fi
+
+    ensurePerms nixbld8 delete
+  fi
+fi
+
+u=$(id -u nixbld9 2> /dev/null) || true
+if [ -n "$u" ]; then
+  if [ "$u" -gt 501 ]; then
+    # TODO: add `darwin.primaryUser` as well
+    if [[ nixbld9 == "$USER" ]]; then
+      # shellcheck disable=SC2016
+      printf >&2 '\e[1;31merror: refusing to delete the user calling `darwin-rebuild` (%s), aborting activation\e[0m\n', nixbld9
+      exit 1
+    fi
+
+    ensurePerms nixbld9 delete
+  fi
+fi
+
+
+
+if [[ "${checkActivation:-0}" -eq 1 ]]; then
+  echo "ok" >&2
+  exit 0
+fi
+
+declare -A etcSha256Hashes=(
+  [bashrc]='444c716ac2ccd9e1e3347858cb08a00d2ea38e8c12fdc5798380dc261e32e9ef 617b39e36fa69270ddbee19ddc072497dbe7ead840cbd442d9f7c22924f116f4 6be16cf7c24a3c6f7ae535c913347a3be39508b3426f5ecd413e636e21031e66 08ffbf991a9e25839d38b80a0d3bce3b5a6c84b9be53a4b68949df4e7e487bb7'
+  [nix/nix.conf]='7c2d80499b39256b03ee9abd3d6258343718306aca8d472c26ac32c9b0949093 19299897fa312d9d32b3c968c2872dd143085aa727140cec51f57c59083e93b9 c4ecc3d541c163c8fcc954ccae6b8cab28c973dc283fea5995c69aaabcdf785f ef78f401a9b5a42fd15e967c50da384f99ec62f9dbc66ea38f1390b46b63e1ff c06b0c6080dd1d62e61a30cfad100c0cfed2d3bcd378e296632dc3b28b31dc69 ff08c12813680da98c4240328f828647b67a65ba7aa89c022bd8072cba862cf1 f3e03d851c240c1aa7daccd144ee929f0f5971982424c868c434eb6030e961d4 c6080216f2a170611e339c3f46e4e1d61aaf0d8b417ad93ade8d647da1382c11 97f4135d262ca22d65c9554aad795c10a4491fa61b67d9c2430f4d82bbfec9a2 5d23e6d7015756c6f300f8cd558ec4d9234ca61deefd4f2478e91a49760b0747 e4974acb79c56148cb8e92137fa4f2de9b7356e897b332fc4e6769e8c0b83e18 966d22ef5bb9b56d481e8e0d5f7ca2deaf4d24c0f0fc969b2eeaa7ae0aa42907 24797ac05542ff8b52910efc77870faa5f9e3275097227ea4e50c430a5f72916 b027b5cad320b5b8123d9d0db9f815c3f3921596c26dc3c471457098e4d3cc40'
+  [nix/registry.json]=''
+  [profiles/per-user/qmpwwsd]=''
+  [ssh/sshd_config.d/101-authorized-keys.conf]=5a5dc1e20e8abc162ad1cc0259bfd1dbb77981013d87625f97d9bd215175fc0a
+  [ssl/certs/ca-certificates.crt]=''
+  [zprofile]='db8422f92d8cff684e418f2dcffbb98c10fe544b5e8cd588b2009c7fa89559c5 0235d3c1b6cf21e7043fbc98e239ee4bc648048aafaf6be1a94a576300584ef2'
+  [zshenv]=d07015be6875f134976fce84c6c7a77b512079c1c5f9594dfa65c70b7968b65f
+  [zshrc]='19a2d673ffd47b8bed71c5218ff6617dfc5e8533b240b9ba79142a45f8823c23 fb5827cb4712b7e7932d438067ec4852c8955a9ff0f55e282473684623ebdfa1 c5a00c072c920f46216454978c44df044b2ec6d03409dc492c7bdcd92c94a110 40b0d8751adae5b0100a4f863be5b75613a49f62706427e92604f7e04d2e2261 2af1b563e389d11b76a651b446e858116d7a20370d9120a7e9f78991f3e5f336'
+)
+
+declare -a etcProblems=()
+
+while IFS= read -r -d "" configFile; do
+  subPath=${configFile#"$systemConfig"/etc/}
+  etcStaticFile=/etc/static/$subPath
+  etcFile=/etc/$subPath
+
+  # We need to check files that exist and aren't already links to
+  # $etcStaticFile for known hashes.
+  if [[
+    -e $etcFile
+    && $(readlink "$etcFile") != "$etcStaticFile"
+  ]]; then
+    # Only check hashes of paths that resolve to regular files;
+    # everything else (e.g. directories) we complain about
+    # unconditionally.
+    if [[ -f $(readlink -f "$etcFile") ]]; then
+      etcFileSha256Output=$(shasum -a 256 "$etcFile")
+      etcFileSha256Hash=${etcFileSha256Output%% *}
+      for knownSha256Hash in ${etcSha256Hashes[$subPath]}; do
+        if [[ $etcFileSha256Hash == "$knownSha256Hash" ]]; then
+          # Hash matches, OK to overwrite; go to the next file.
+          continue 2
+        fi
+      done
+    fi
+    etcProblems+=("$etcFile")
+  fi
+done < <(find -H "$systemConfig/etc" -type l -print0)
+
+if (( ${#etcProblems[@]} )); then
+  printf >&2 '\x1B[1;31merror: Unexpected files in /etc, aborting '
+  printf >&2 'activation\x1B[0m\n'
+  printf >&2 'The following files have unrecognized content and would be '
+  printf >&2 'overwritten:\n\n'
+  printf >&2 '  %s\n' "${etcProblems[@]}"
+  printf >&2 '\nPlease check there is nothing critical in these files, '
+  printf >&2 'rename them by adding .before-nix-darwin to the end, and '
+  printf >&2 'then try again.\n'
+  exit 2
+fi
+
+sudo /nix/store/8shk0m5i7asrrn8y9953q6qr9d509im9-setup-homebrew
+
+
+# Set defaults
+echo >&2 "user defaults..."
+
+defaults write -g 'AppleInterfaceStyle' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<string>Dark</string>
+</plist>'
+defaults write -g 'AppleWindowTabbingMode' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<string>fullscreen</string>
+</plist>'
+defaults write -g 'NSWindowShouldDragOnGesture' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<true/>
+</plist>'
+
+
+
+defaults write com.apple.menuextra.clock 'Show24Hour' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<true/>
+</plist>'
+defaults write com.apple.dock 'autohide' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<true/>
+</plist>'
+defaults write com.apple.dock 'enable-spring-load-actions-on-all-items' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<true/>
+</plist>'
+defaults write com.apple.dock 'largesize' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<integer>75</integer>
+</plist>'
+defaults write com.apple.dock 'magnification' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<true/>
+</plist>'
+defaults write com.apple.dock 'mouse-over-hilite-stack' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<true/>
+</plist>'
+defaults write com.apple.dock 'mru-spaces' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<false/>
+</plist>'
+defaults write com.apple.dock 'persistent-apps' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>tile-data</key>
+		<dict>
+			<key>file-data</key>
+			<dict>
+				<key>_CFURLString</key>
+				<string>/nix/store/3rkg1bw4v00srggd5xylycfanm3fixf7-kitty-0.37.0/Applications/kitty.app</string>
+				<key>_CFURLStringType</key>
+				<integer>0</integer>
+			</dict>
+		</dict>
+	</dict>
+	<dict>
+		<key>tile-data</key>
+		<dict>
+			<key>file-data</key>
+			<dict>
+				<key>_CFURLString</key>
+				<string>/Applications/Firefox.app</string>
+				<key>_CFURLStringType</key>
+				<integer>0</integer>
+			</dict>
+		</dict>
+	</dict>
+	<dict>
+		<key>tile-data</key>
+		<dict>
+			<key>file-data</key>
+			<dict>
+				<key>_CFURLString</key>
+				<string>/Applications/Google Chrome.app</string>
+				<key>_CFURLStringType</key>
+				<integer>0</integer>
+			</dict>
+		</dict>
+	</dict>
+	<dict>
+		<key>tile-data</key>
+		<dict>
+			<key>file-data</key>
+			<dict>
+				<key>_CFURLString</key>
+				<string>/Applications/Notion.app</string>
+				<key>_CFURLStringType</key>
+				<integer>0</integer>
+			</dict>
+		</dict>
+	</dict>
+	<dict>
+		<key>tile-data</key>
+		<dict>
+			<key>file-data</key>
+			<dict>
+				<key>_CFURLString</key>
+				<string>/nix/store/iqkq273746574yamm3c8kwrlgwpm66xm-obsidian-1.7.5/Applications/Obsidian.app</string>
+				<key>_CFURLStringType</key>
+				<integer>0</integer>
+			</dict>
+		</dict>
+	</dict>
+	<dict>
+		<key>tile-data</key>
+		<dict>
+			<key>file-data</key>
+			<dict>
+				<key>_CFURLString</key>
+				<string>/Applications/Telegram.app</string>
+				<key>_CFURLStringType</key>
+				<integer>0</integer>
+			</dict>
+		</dict>
+	</dict>
+	<dict>
+		<key>tile-data</key>
+		<dict>
+			<key>file-data</key>
+			<dict>
+				<key>_CFURLString</key>
+				<string>/System/Applications/Mail.app</string>
+				<key>_CFURLStringType</key>
+				<integer>0</integer>
+			</dict>
+		</dict>
+	</dict>
+</array>
+</plist>'
+defaults write com.apple.dock 'show-process-indicators' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<true/>
+</plist>'
+defaults write com.apple.dock 'tilesize' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<integer>54</integer>
+</plist>'
+defaults write com.apple.finder 'AppleShowAllExtensions' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<true/>
+</plist>'
+defaults write com.apple.finder 'FXPreferredViewStyle' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<string>clmv</string>
+</plist>'
+defaults write com.apple.finder 'ShowPathbar' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<true/>
+</plist>'
+defaults write com.apple.finder '_FXSortFoldersFirst' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<true/>
+</plist>'
+
+defaults write com.apple.AppleMultitouchMouse 'MouseButtonMode' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<string>OneButton</string>
+</plist>'
+defaults write com.apple.driver.AppleMultitouchMouse.mouse 'MouseButtonMode' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<string>OneButton</string>
+</plist>'
+defaults write com.apple.screencapture 'location' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<string>~/Pictures/screenshots</string>
+</plist>'
+defaults write com.apple.screensaver 'askForPasswordDelay' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<integer>10</integer>
+</plist>'
+
+defaults write com.apple.AppleMultitouchTrackpad 'TrackpadThreeFingerDrag' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<true/>
+</plist>'
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad 'TrackpadThreeFingerDrag' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<true/>
+</plist>'
+
+
+
+defaults write com.apple.WindowManager 'EnableStandardClickToShowDesktop' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<false/>
+</plist>'
+defaults write com.apple.WindowManager 'StandardHideDesktopIcons' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<true/>
+</plist>'
+defaults write com.apple.WindowManager 'StandardHideWidgets' $'<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<true/>
+</plist>'
+
+
+# Only restart Dock if current user is logged in
+if pgrep -xu $UID Dock >/dev/null; then
+  echo >&2 "restarting Dock..."
+  killall Dock || true
+fi
+
+
+# Set up user launchd services in ~/Library/LaunchAgents
+echo "setting up user launchd services..."
+
+
+
+
+
+
+for f in /run/current-system/user/Library/LaunchAgents/*; do
+  [[ -e "$f" ]] || break  # handle when directory is empty
+  f=${f#/run/current-system/user/Library/LaunchAgents/}
+
+  if [[ ! -e "/nix/store/74i64dmqn3bx7xrdi23sbrc8aanwhqzi-launchd/user/Library/LaunchAgents/$f" ]]; then
+    echo "removing user service $(basename "$f" .plist)" >&2
+    launchctl unload ~/Library/LaunchAgents/"$f" || true
+    if [[ -e ~/Library/LaunchAgents/"$f" ]]; then
+      rm -f ~/Library/LaunchAgents/"$f"
+    fi
+  fi
+done
+
+# Homebrew Bundle
+echo >&2 "Homebrew bundle..."
+if [ -f "/opt/homebrew/bin/brew" ]; then
+  PATH="/opt/homebrew/bin":$PATH brew bundle --file='/nix/store/78ykpm4k8pa50j00ia6q9id3mh9v7y25-Brewfile' --no-lock --cleanup --zap
+else
+  echo -e "\e[1;31merror: Homebrew is not installed, skipping...\e[0m" >&2
+fi
+
+
+
+
+exit $_status
