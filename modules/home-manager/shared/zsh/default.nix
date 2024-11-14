@@ -14,9 +14,10 @@ in
     enable = true;
     envExtra = ''
       ZDOTDIR="${config.home.homeDirectory}/.config/zsh"
-      alias rnix="${systemSpecificRebuildCmd} switch --flake /etc/nixos --impure"
+      alias rnix="${systemSpecificRebuildCmd} switch --flake ~/nixos --impure"
     '';
   };
 
-  home.file.".config/zsh".source = homeManagerConfig.linkSharedApp config "zsh";
+  home.file.".config/zsh".source = ~/nixos/modules/home-manager/shared/zsh/config;
+  # home.file.".config/zsh".source = homeManagerConfig.linkSharedApp config "zsh";
 }

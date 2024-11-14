@@ -10,10 +10,9 @@
     # shells = [ pkgs.bash pkgs.zsh ];
     # loginShell = pkgs.zsh;
     systemPackages = with pkgs; [
-      kitty
-      aerospace
-      jankyborders
-      sketchybar
+      # aerospace
+      # jankyborders
+      # sketchybar
 
       # Development
       atac
@@ -35,6 +34,8 @@
       glow
       jq
       neovim
+      nh
+      oh-my-posh
       lazygit
       lazydocker
       ripgrep

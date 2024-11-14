@@ -5,7 +5,7 @@
     ./bat
     ./kitty
     ./nvim
-    # ./tmux
+    ./tmux
     ./yazi
     ./zsh
     # ./ssh

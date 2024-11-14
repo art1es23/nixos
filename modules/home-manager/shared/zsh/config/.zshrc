@@ -1,6 +1,10 @@
 export TERM="xterm-256color"
 export ZSH="$HOME/.config/zsh"
 
+# Add any additional configurations here
+export NIX_CONF_DIR=$HOME/.config/nix
+export PATH=/run/current-system/sw/bin:$HOME/.nix-profile/bin:$PATH
+
 # Environment
 export LANG=en_US.UTF-8
 export VISUAL="nvim"
@@ -19,14 +23,54 @@ export PATH="$PATH:/opt/homebrew/opt/ruby/bin"
 source "$ZSH/plugins/antigen.zsh"
 
 antigen bundle git
+antigen bundle brew
+antigen bundle docker
+antigen bundle node
+antigen bundle npm
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-syntax-highlighting
 
+# antigen bundle <<EOBUNDLES
+#     # Bundles from the default repo (robbyrussell's oh-my-zsh)
+#
+#     asdf
+#     git
+#     git-commit
+#     brew
+#     docker
+#     npm
+#     node
+#     rust
+#     deno
+#     bun
+#     heroku
+#     ssh
+#     ssh-agent
+#     nvm
+#
+#     zsh-users/zsh-syntax-highlighting
+#     zsh-users/zsh-autosuggestions
+#     zsh-users/zsh-completions
+#
+#     redis-cli
+#
+# EOBUNDLES
+
 antigen apply
 
-# # Theming
-# eval "$(oh-my-posh init zsh --config $ZSH/themes/tokyonight.omp.toml)"
+# Zoxide
+eval "$(zoxide init zsh)"
+
+# Atuin
+eval "$(atuin init zsh)"
+
+# Theming
+eval "$(oh-my-posh init zsh --config $ZSH/themes/tokyonight.omp.toml)"
+
+# Vim mode
+set -o vi
+bindkey -v
 
 # History
 HISTSIZE=5000
@@ -107,10 +151,8 @@ alias v="nvim"
 
 alias gst="lazygit"
 
-alias ls="eza --icons=always"
-
-alias cnix="nvim /etc/nixos"
-alias cdnix="cd /etc/nixos"
+alias cnix="nvim ~/nixos"
+alias cdnix="cdd ~/nixos"
 
 alias cn="vim ~/.config/nvim"
 alias cz="vim ~/.config/zsh"

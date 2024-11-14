@@ -1,4 +1,4 @@
-{...}:
+{ ... }:
 
 {
   homebrew = {
@@ -9,9 +9,10 @@
       autoUpdate = true;
     };
 
-    brews = [ 
+    brews = [
       "mas"
       "imagemagick"
+      # "sketchybar"
     ];
 
     casks = [
@@ -25,24 +26,23 @@
       "telegram"
       "microsoft-teams"
       # "steam"
-      
+
       # Development
       "docker"
       "figma"
       "utm" # VM on macOS
       "miro"
       "godot"
-      # "pixelorama"
+      "pixelorama"
       # "ngrock"
       # "zed"
       # "insomnia" # HTTP requests like Postman
-      
+
       # Browsers
       "firefox"
       "google-chrome"
 
       # Productivity
-      # "nikitabobko/tap/aerospace"
       "obsidian"
       "notion"
       "raycast"
@@ -65,7 +65,7 @@
       "wireshark" # network sniffer
       "keycastr" # show keystrokes on screen
       # "obs"
-      
+
       # UI
       "sf-symbols" # patched font for sketchybar
     ];
@@ -73,6 +73,7 @@
     taps = [
       # default
       # "homebrew/bundle"
+      # "FelixKratz/formulae"
     ];
   };
 }
