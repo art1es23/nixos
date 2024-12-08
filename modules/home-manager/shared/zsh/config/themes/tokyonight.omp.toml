@@ -106,21 +106,21 @@ Text = ''
 Duration = 0
 NameLength = 0
 
-# [transient_prompt]
-#   template = '➜ '
-#   background = 'p:t-background'
-#   foreground = 'p:terminal-blue'
-#   Text = ''
-#   Duration = 0
-#   NameLength = 0
+[transient_prompt]
+template = '➜ '
+background = 'p:t-background'
+foreground = 'p:terminal-blue'
+Text = ''
+Duration = 0
+NameLength = 0
 
-# [secondary_prompt]
-#   template = '➜ '
-#   background = 'transparent'
-#   foreground = 'p:terminal-blue'
-#   Text = ''
-#   Duration = 0
-#   NameLength = 0
+[secondary_prompt]
+template = '➜ '
+background = 'transparent'
+foreground = 'p:terminal-blue'
+Text = ''
+Duration = 0
+NameLength = 0
 
 [palette]
 blue-bell = '#9aa5ce'

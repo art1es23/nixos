@@ -8,6 +8,6 @@
     ./tmux
     ./yazi
     ./zsh
-    # ./ssh
+    ./ssh
   ];
 }

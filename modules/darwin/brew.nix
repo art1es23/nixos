@@ -17,14 +17,14 @@
     casks = [
       # NOTE: Homerow isn't available as a cask yet
 
-      # "1password"
+      "1password"
       # "nordpass"
 
       # Loosely, social platforms
       "discord"
       "telegram"
       "microsoft-teams"
-      # "steam"
+      "steam"
 
       # Development
       "docker"
@@ -35,7 +35,7 @@
       "pixelorama"
       # "ngrock"
       # "zed"
-      # "insomnia" # HTTP requests like Postman
+      "insomnia" # HTTP requests like Postman
 
       # Browsers
       "firefox"
@@ -50,6 +50,7 @@
       # utilities
       "aldente" # battery management
       "appcleaner"
+      "cleanmymac"
       "shottr"
       "keka"
       # "cursorcerer"
