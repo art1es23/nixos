@@ -93,22 +93,37 @@
           linkSharedApp = config: app: config.lib.file.mkOutOfStoreSymlink "${sharedPath}/${app}/config";
         };
 
+
+	createNixOS = 
+	  system: hostname: username: fullname: email:
+	  (
+		let
+		  vars = import (./. + "/hosts/${hostname}/vars.nix");
+		  specialArgs = { inherit system inputs outputs hostname username fullname email vars; };
+		  modules = (builtins.attrValues nixosModules) ++ [
+			(./. + "/hosts/${hostname}")
+			# agenix.nixosModules.default
+			# impermanence.nixosModules.impermanence
+			home-manager.nixosModules.home-manager
+			{
+				home-manager.useGlobalPkgs = true;
+				home-manager.useUserPackages = true;
+				home-manager.users."${username}" = homeManagerModules;
+				home-manager.extraSpecialArgs = specialArgs // {
+					homeManagerConfig = buildHomeManagerConfig hostname;
+				};
+			}
+		  ];
+		in
+		  nixpkgs.lib.nixosSystem { inherit system modules specialArgs; }
+	  );
+
       createDarwin =
         hostname: username: fullname: email:
         (
           let
             system = "aarch64-darwin";
-            specialArgs = {
-              inherit
-                inputs
-                outputs
-                hostname
-                username
-                fullname
-                email
-                system
-                ;
-            };
+            specialArgs = { inherit inputs outputs hostname username fullname email system; };
             modules = (builtins.attrValues darwinModules) ++ [
               (./. + "/hosts/${hostname}")
               # agenix.nixosModules.default
@@ -148,11 +163,12 @@
 
       # overlays = import ./overlays { inherit inputs; };
 
-      # nixosConfigurations = {
-      # };
+      nixosConfigurations = {
+      	dws = createNixOS "x86_64-linux" "dws" "gca" "qmpwwsd" "dreamwinamounts.dev@gmail.com";
+      };
 
       darwinConfigurations = {
-        qmpwwsd = createDarwin "qmpwwsd" "qmpwwsd" "qmpwwsd" "dreamwinamounts@gmail.com";
+        qmpwwsd = createDarwin "qmpwwsd" "qmpwwsd" "qmpwwsd" "dreamwinamounts.dev@gmail.com";
       };
 
       darwinPackages = self.darwinConfigurations.${outputs.networking.hostName}.pkgs;
