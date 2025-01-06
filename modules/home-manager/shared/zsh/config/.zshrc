@@ -3,7 +3,6 @@ export ZSH="$HOME/.config/zsh"
 
 # Add any additional configurations here
 export NIX_CONF_DIR=$HOME/.config/nix
-export PATH=/run/current-system/sw/bin:$HOME/.nix-profile/bin:$PATH
 
 # Environment
 export LANG=en_US.UTF-8

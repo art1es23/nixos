@@ -1,7 +1,6 @@
 {
   homeManagerConfig,
   config,
-  username,
   ...
 }:
 
