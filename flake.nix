@@ -33,6 +33,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # hyprland.url = "github:hyprwm/hyprland";
+
     # agenix = {
     #   url = "github:ryantm/agenix";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -90,49 +92,75 @@
           sharedPath = "${rootPath}/shared";
         in
         {
-          linkHostApp = config: app: 
-	  	let 
-		  linkPath = "${hostPath}/${app}/config";
-		in
-		  builtins.trace "Linking host app config to ${linkPath}" (config.lib.file.mkOutOfStoreSymlink linkPath);
-          linkSharedApp = config: app: 
-	  	let 
-		  linkPath = "${sharedPath}/${app}/config"; 
-		in 
-		  builtins.trace "Linking shared app config to ${linkPath}" (config.lib.file.mkOutOfStoreSymlink linkPath);
+          linkHostApp =
+            config: app:
+            let
+              linkPath = "${hostPath}/${app}/config";
+            in
+            builtins.trace "Linking host app config to ${linkPath}" (
+              config.lib.file.mkOutOfStoreSymlink linkPath
+            );
+          linkSharedApp =
+            config: app:
+            let
+              linkPath = "${sharedPath}/${app}/config";
+            in
+            builtins.trace "Linking shared app config to ${linkPath}" (
+              config.lib.file.mkOutOfStoreSymlink linkPath
+            );
         };
 
-
-	createNixOS = 
-	  system: hostname: username: fullname: email:
-	  (
-		let
-		  vars = import (./. + "/hosts/${hostname}/vars.nix");
-		  specialArgs = { inherit system inputs outputs hostname username fullname email vars; };
-		  modules = (builtins.attrValues nixosModules) ++ [
-			(./. + "/hosts/${hostname}")
-			# agenix.nixosModules.default
-			# impermanence.nixosModules.impermanence
-			home-manager.nixosModules.home-manager
-			{
-				home-manager.useGlobalPkgs = true;
-				home-manager.useUserPackages = true;
-				home-manager.users."${username}" = homeManagerModules;
-				home-manager.extraSpecialArgs = specialArgs // {
-					homeManagerConfig = buildHomeManagerConfig hostname username;
-				};
-			}
-		  ];
-		in
-		  nixpkgs.lib.nixosSystem { inherit system modules specialArgs; }
-	  );
+      createNixOS =
+        system: hostname: username: fullname: email:
+        (
+          let
+            vars = import (./. + "/hosts/${hostname}/vars.nix");
+            specialArgs = {
+              inherit
+                system
+                inputs
+                outputs
+                hostname
+                username
+                fullname
+                email
+                vars
+                ;
+            };
+            modules = (builtins.attrValues nixosModules) ++ [
+              (./. + "/hosts/${hostname}")
+              # agenix.nixosModules.default
+              # impermanence.nixosModules.impermanence
+              home-manager.nixosModules.home-manager
+              {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.users."${username}" = homeManagerModules;
+                home-manager.extraSpecialArgs = specialArgs // {
+                  homeManagerConfig = buildHomeManagerConfig hostname username;
+                };
+              }
+            ];
+          in
+          nixpkgs.lib.nixosSystem { inherit system modules specialArgs; }
+        );
 
       createDarwin =
         hostname: username: fullname: email:
         (
           let
             system = "aarch64-darwin";
-            specialArgs = { inherit inputs outputs hostname username fullname email system; };
+            specialArgs = {
+              inherit
+                inputs
+                outputs
+                hostname
+                username
+                fullname
+                email
+                system
+                ;
+            };
             modules = (builtins.attrValues darwinModules) ++ [
               (./. + "/hosts/${hostname}")
               # agenix.nixosModules.default
@@ -173,7 +201,7 @@
       # overlays = import ./overlays { inherit inputs; };
 
       nixosConfigurations = {
-      	dws = createNixOS "x86_64-linux" "dws" "gca" "qmpwwsd" "dreamwinamounts.dev@gmail.com";
+        dws = createNixOS "x86_64-linux" "dws" "gca" "qmpwwsd" "dreamwinamounts.dev@gmail.com";
       };
 
       darwinConfigurations = {

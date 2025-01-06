@@ -1,8 +1,10 @@
 { pkgs, ... }:
 
 {
-	imports = [
-	];
+  imports = [
+    ./hyprland
+    ./waybar
+  ];
 
-	home.packages = with pkgs; [];
+  home.packages = with pkgs; [ ];
 }
