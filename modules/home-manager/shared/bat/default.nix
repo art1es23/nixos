@@ -1,6 +1,10 @@
-{ homeManagerConfig, config, ... }:
+{
+  homeManagerConfig,
+  config,
+  username,
+  ...
+}:
 
 {
-  home.file.".config/bat".source = ~/nixos/modules/home-manager/shared/bat/config;
-  # home.file.".config/bat".source = homeManagerConfig.linkSharedApp config "bat";
+  home.file.".config/bat".source = homeManagerConfig.linkSharedApp config "bat";
 }

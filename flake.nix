@@ -82,15 +82,24 @@
       );
 
       buildHomeManagerConfig =
-        hostname:
+        hostname: username:
         let
-          rootPath = "~/nixos/modules/home-manager";
+          # rootPath = "${builtins.getEnv "HOME"}/nixos/modules/home-manager";
+          rootPath = "/home/${username}/nixos/modules/home-manager";
           hostPath = "${rootPath}/hosts/${hostname}";
           sharedPath = "${rootPath}/shared";
         in
         {
-          linkHostApp = config: app: config.lib.file.mkOutOfStoreSymlink "${hostPath}/${app}/config";
-          linkSharedApp = config: app: config.lib.file.mkOutOfStoreSymlink "${sharedPath}/${app}/config";
+          linkHostApp = config: app: 
+	  	let 
+		  linkPath = "${hostPath}/${app}/config";
+		in
+		  builtins.trace "Linking host app config to ${linkPath}" (config.lib.file.mkOutOfStoreSymlink linkPath);
+          linkSharedApp = config: app: 
+	  	let 
+		  linkPath = "${sharedPath}/${app}/config"; 
+		in 
+		  builtins.trace "Linking shared app config to ${linkPath}" (config.lib.file.mkOutOfStoreSymlink linkPath);
         };
 
 
@@ -110,7 +119,7 @@
 				home-manager.useUserPackages = true;
 				home-manager.users."${username}" = homeManagerModules;
 				home-manager.extraSpecialArgs = specialArgs // {
-					homeManagerConfig = buildHomeManagerConfig hostname;
+					homeManagerConfig = buildHomeManagerConfig hostname username;
 				};
 			}
 		  ];

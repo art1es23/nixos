@@ -2,6 +2,7 @@
   system,
   config,
   homeManagerConfig,
+  username,
   ...
 }:
 
@@ -18,6 +19,5 @@ in
     '';
   };
 
-  home.file.".config/zsh".source = ~/nixos/modules/home-manager/shared/zsh/config;
   # home.file.".config/zsh".source = homeManagerConfig.linkSharedApp config "zsh";
 }

@@ -1,8 +1,12 @@
-{ homeManagerConfig, config, ... }:
+{
+  homeManagerConfig,
+  config,
+  username,
+  ...
+}:
 
 {
-  programs.tmux.enable = true;
+  # programs.tmux.enable = true;
 
-  home.file.".config/tmux".source = ~/nixos/modules/home-manager/shared/tmux/config;
-  # home.file.".config/tmux".source = homeManagerConfig.linkHostApp config "tmux";
+  home.file.".config/tmux".source = homeManagerConfig.linkSharedApp config "tmux";
 }

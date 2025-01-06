@@ -1,59 +1,73 @@
 { pkgs, inputs, ... }:
 
 {
-	nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfree = true;
 
-	environment.systemPackages = with pkgs; [
-		# Development
-		atac
-		redis
-		heroku
-		nodejs
-		openssh
+  environment.systemPackages = with pkgs; [
+    # System
+    clang-tools
+    gcc
+    cargo
+    nodejs
+    pciutils
+    tcpdump
+    lm_sensors
+    wireguard-tools
+    inetutils
 
-		# CLI
-		age
-		atuin
-		bat
-		curl
-		direnv
-		eza
-		fastfetch
-		fd
-		fx
-		fzf
-		glow
-		jq
-		neovim
-		nh
-		oh-my-posh
-		lazygit
-		lazydocker
-		ripgrep
-		thefuck
-		tmux
-		unzip
-		zoxide
+    # Development
+    atac
+    redis
+    heroku
+    kitty
+    openssh
 
-		# AI
-		aichat
-		ollama
+    # CLI
+    age
+    atuin
+    bat
+    curl
+    direnv
+    eza
+    fastfetch
+    fd
+    fx
+    fzf
+    glow
+    jq
+    neovim
+    nh
+    oh-my-posh
+    lazygit
+    lazydocker
+    ripgrep
+    thefuck
+    tmux
+    unzip
+    wget
+    zoxide
 
-		# Additional
-		obsidian
-		gum
+    # AI
+    aichat
+    ollama
 
-		# LSP Servers
-		nil
-		lua-language-server
-		bash-language-server
-		yaml-language-server
-		typescript-language-server
-		nixfmt-rfc-style
-		prettierd
-	];
+    # Additional
+    firefox
+    google-chrome
+    obsidian
+    gum
 
-	programs.zsh.enable = true;
+    # LSP Servers
+    nil
+    lua-language-server
+    bash-language-server
+    yaml-language-server
+    typescript-language-server
+    nixfmt-rfc-style
+    prettierd
+  ];
 
-	environment.pathsToLink = [ "/share/zsh" ];
+  programs.zsh.enable = true;
+
+  environment.pathsToLink = [ "/share/zsh" ];
 }

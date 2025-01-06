@@ -1,7 +1,8 @@
 { pkgs, ... }:
 
 {
-	imports = [];
+	imports = [
+	];
 
 	home.packages = with pkgs; [];
 }
