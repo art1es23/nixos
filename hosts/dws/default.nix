@@ -1,7 +1,5 @@
 {
   username,
-  config,
-  lib,
   ...
 }:
 {
@@ -27,23 +25,14 @@
   users.users.${username}.home = "/home/${username}";
 
   services = {
-    xserver = {
-      enable = true;
-      # Enable the GNOME Desktop Environment
-      # displayManager.gdm.enable = true;
-      # desktopManager.gnome.enable = true;
-      # # Configure keymap in X11
-      # xkb = {
-      # 	layout = "us";
-      # 	variant = "";
-      # };
-    };
+    xserver.enable = true;
 
     pipewire = {
       enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+      jack.enable = true;
     };
 
     printing.enable = true;

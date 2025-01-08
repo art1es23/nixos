@@ -1,9 +1,10 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
+    _1password-gui
     # System
     clang-tools
     gcc
@@ -14,12 +15,6 @@
     lm_sensors
     wireguard-tools
     inetutils
-    waybar
-    nautilus
-    dunst
-    libnotify
-    swww
-    rofi-wayland
 
     # Development
     atac
@@ -61,6 +56,7 @@
     firefox
     google-chrome
     obsidian
+    telegram-desktop
     gum
 
     # LSP Servers
@@ -77,24 +73,22 @@
     zsh.enable = true;
     hyprland = {
       enable = true;
-      # nvidiaPatches = true;
       xwayland.enable = true;
-      # # set the flake package
-      # package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-      # # make sure to also set the portal package, so that they are in sync
-      # portalPackage =
-      #   inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+      systemd.setPath.enable = true;
     };
   };
 
   environment.sessionVariables = {
     WLR_NO_HARDWARE_CURSORS = "1";
-    NIXOS_OZONE_WL = "1";
+    # NIXOS_OZONE_WL = "1";
+    # XDG_SESSION_TYPE = "wayland";
+    # XDG_CURRENT_DESKTOP = "Hyprland";
+    # WLR_DRM_DEVICES = "/dev/dri/card0";
+    # SDL_VIDEODRIVER = "wayland";
   };
 
   hardware = {
-    opengl.enable = true;
-    # nvidia.modesetting.enable = true;
+    graphics.enable = true;
   };
 
   xdg.portal = {
@@ -102,14 +96,19 @@
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
-  # sound.enable = true;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
+  security = {
+    rtkit.enable = true;
+    pam.services.hyprlock = { };
+  };
+
+  services = {
+    displayManager = {
+      defaultSession = "hyprland";
+      sddm = {
+        enable = true;
+        wayland.enable = true;
+      };
+    };
   };
 
   environment.pathsToLink = [ "/share/zsh" ];

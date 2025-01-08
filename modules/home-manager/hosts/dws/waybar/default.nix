@@ -25,7 +25,7 @@
           "cpu"
           "memory"
           "temperature"
-          "backlight"
+          # "backlight"
           "wireplumber"
           "clock"
           "custom/separator"
@@ -64,7 +64,7 @@
           "modules" = [
             "idle_inhibitor"
             "custom/bluetooth"
-            "custom/kdeconnect"
+            # "custom/kdeconnect"
             "custom/wifi"
           ];
         };
@@ -200,23 +200,24 @@
           "format" = "{icon}";
           "format-icons" = " ";
           "exec-on-event" = "true";
-          "on-click" = "$HOME/scripts/rofi-power";
-          "tooltip-format" = "Power Menu";
+          "on-click" = "bash $HOME/.config/hypr/scripts/rofi-power";
+          "tooltip" = false;
+          # "tooltip-format" = "Power Menu";
         };
 
-        "custom/kdeconnect" = {
-          "format" = "{icon}";
-          "format-icons" = "";
-          "exec-on-event" = "true";
-          "on-click" = "kdeconnect-app";
-          "tooltip-format" = "KDE Connect";
-        };
+        # "custom/kdeconnect" = {
+        #   "format" = "{icon}";
+        #   "format-icons" = "";
+        #   "exec-on-event" = "true";
+        #   "on-click" = "kdeconnect-app";
+        #   "tooltip-format" = "KDE Connect";
+        # };
 
         "custom/bluetooth" = {
           "format" = "{icon}";
           "format-icons" = "";
           "exec-on-event" = "true";
-          "on-click" = "$HOME/scripts/rofi-bluetooth";
+          "on-click" = "bash $HOME/.config/hypr/scripts/rofi-bluetooth";
           "tooltip-format" = "Bluetooth Menu";
         };
 
@@ -224,7 +225,7 @@
           "format" = "{icon}";
           "format-icons" = "";
           "exec-on-event" = "true";
-          "on-click" = "$HOME/scripts/rofi-wifi";
+          "on-click" = "bash $HOME/.config/hypr/scripts/rofi-wifi";
           "tooltip-format" = "Wifi Menu";
         };
 
@@ -234,26 +235,26 @@
           "tooltip" = false;
         };
 
-        "custom/notification" = {
-          "tooltip" = false;
-          "format" = "{icon} {}";
-          "format-icons" = {
-            "notification" = "<span foreground='red'><sup></sup></span>";
-            "none" = "";
-            "dnd-notification" = "<span foreground='red'><sup></sup></span>";
-            "dnd-none" = "";
-            "inhibited-notification" = "<span foreground='red'><sup></sup></span>";
-            "inhibited-none" = "";
-            "dnd-inhibited-notification" = "<span foreground='red'><sup></sup></span>";
-            "dnd-inhibited-none" = "";
-          };
-          "return-type" = "json";
-          "exec-if" = "which swaync-client";
-          "exec" = "swaync-client -swb";
-          "on-click" = "swaync-client -t -sw";
-          "on-click-right" = "swaync-client -d -sw";
-          "escape" = true;
-        };
+        # "custom/notification" = {
+        #   "tooltip" = false;
+        #   "format" = "{icon} {}";
+        #   "format-icons" = {
+        #     "notification" = "<span foreground='red'><sup></sup></span>";
+        #     "none" = "";
+        #     "dnd-notification" = "<span foreground='red'><sup></sup></span>";
+        #     "dnd-none" = "";
+        #     "inhibited-notification" = "<span foreground='red'><sup></sup></span>";
+        #     "inhibited-none" = "";
+        #     "dnd-inhibited-notification" = "<span foreground='red'><sup></sup></span>";
+        #     "dnd-inhibited-none" = "";
+        #   };
+        #   "return-type" = "json";
+        #   "exec-if" = "which swaync-client";
+        #   "exec" = "swaync-client -swb";
+        #   "on-click" = "swaync-client -t -sw";
+        #   "on-click-right" = "swaync-client -d -sw";
+        #   "escape" = true;
+        # };
 
         "keyboard-state" = {
           "numlock" = true;
