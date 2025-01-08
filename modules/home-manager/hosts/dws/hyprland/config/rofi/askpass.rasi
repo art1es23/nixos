@@ -1,0 +1,35 @@
+* {
+    background-color:      #1a1b26;
+    text-color:           #D8DEE9;
+    font:            "SF Mono 12";
+}
+
+#window {
+    /* Change the this according to your screen width */
+    width:      420px;
+
+    /* Change this value according to your screen height */
+    y-offset: -10%;
+
+    /* This padding is given just for aesthetic purposes */
+    padding:    40px;
+
+    /* Add a border so that it is noticeable when the prompt appears.
+     * This is because the prompt blends in with my terminal color
+     */
+    border-color: #1a1b26;
+    border: 2px;
+    border-radius: 10px;
+}
+
+
+#entry {
+    /*
+     * For some reason, without this option, a dash/hyphen appears
+     * at the end of the entry
+     */
+    expand: true;
+
+    /* Keeping using 200px so that long passwords can be typed */
+    width: 220px;
+}

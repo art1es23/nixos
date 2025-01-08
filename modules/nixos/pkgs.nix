@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  username,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   nixpkgs.config.allowUnfree = true;
@@ -76,6 +81,16 @@
       xwayland.enable = true;
       systemd.setPath.enable = true;
     };
+  };
+
+  environment.etc."home/${username}/.config/hypr/scripts/rofi-askpass" = {
+    source = "/home/${username}/.config/hypr/scripts/rofi-askpass";
+    mode = "0755"; # Readable and executable by the owner and others
+  };
+
+  environment.variables = {
+    SSH_ASKPASS = lib.mkForce "$HOME/.config/hypr/scripts/rofi-askpass";
+    SUDO_ASKPASS = lib.mkForce "$HOME/.config/hypr/scripts/rofi-askpass";
   };
 
   environment.sessionVariables = {

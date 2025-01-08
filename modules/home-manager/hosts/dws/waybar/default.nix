@@ -42,8 +42,8 @@
           all-outputs = false;
           format = "{icon}";
           format-icons = {
-            "1" = "󰈹";
-            "2" = "";
+            "1" = "";
+            "2" = "󰈹";
             "3" = "";
             "4" = "";
             "5" = "";
@@ -77,8 +77,8 @@
         "river/tags" = {
           "num-tags" = 7;
           "tag-labels" = [
-            "󰈹"
             ""
+            "󰈹"
             ""
             ""
             ""

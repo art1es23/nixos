@@ -6,7 +6,7 @@
       "$mod, M, exit,"
       "$mod, E, exec, $fileManager"
       "$mod, G, togglefloating,"
-      "$mod, R, exec, $menu"
+      "$mod, SPACE, exec, $menu"
       "$mod, P, pseudo, # dwindle"
       "$mod, V, togglesplit, # dwindle"
       "$mod, F, fullscreen,"

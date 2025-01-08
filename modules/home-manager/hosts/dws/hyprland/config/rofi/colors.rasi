@@ -1,9 +1,9 @@
 // vim:ft=rasi
 * {
   font:                   "JetBrainsMono Nerd Font 10";
-  foreground:             #C8C093;
-  background:             #1F1F28;
-  highlight:              #F1EDEE;
+  foreground:             #c0caf5;
+  background:             #1a1b26;
+  highlight:              #7aa2f7;
 
   pink:                   #D99887;
   old-highlight:          #F1594F;
@@ -33,7 +33,7 @@
 element-icon {
   /*Better to increase the whole element size with dpi*/
   /* Or Maybe Not, Just have a unified icon size for all scheme */
-  size: 18;
+  size: 22;
 }
 
 element-text {

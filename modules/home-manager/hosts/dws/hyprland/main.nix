@@ -31,9 +31,9 @@
         "blueman-applet"
         "hypridle"
         "wl-clipboard"
-        "firefox &"
-        "$terminal &"
-        "telegram-desktop &"
+        "$terminal"
+        "firefox"
+        "telegram-desktop"
       ];
     };
   };

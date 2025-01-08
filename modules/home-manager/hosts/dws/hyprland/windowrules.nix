@@ -13,6 +13,9 @@
     windowrulev2 = [
       "suppressevent maximize, class:.*"
       "nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0"
+      "workspace 2,class:(firefox)"
+      "workspace 2,class:(google-chrome)"
+      "workspace 3,class:($fileManager)"
       "workspace 5,class:(telegram)"
     ];
   };
