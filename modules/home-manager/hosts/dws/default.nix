@@ -4,12 +4,12 @@
   imports = [
     ./hyprland
     ./waybar
+    ./dunst
   ];
 
   home.packages = with pkgs; [
     # Hyprland
     waybar
-    nautilus
     dunst
     libnotify
     swww
@@ -23,6 +23,8 @@
     hyprlock
     hyprpicker
     wl-clipboard
+
+    cliphist
 
     pavucontrol
     hyprpolkitagent

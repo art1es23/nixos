@@ -25,7 +25,9 @@
   users.users.${username}.home = "/home/${username}";
 
   services = {
-    xserver.enable = true;
+    xserver = {
+      enable = true;
+    };
 
     pipewire = {
       enable = true;

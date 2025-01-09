@@ -15,6 +15,7 @@
         margin-bottom = 0;
         spacing = 1;
         modules-left = [
+          "battery"
           "hyprland/workspaces"
           "river/tags"
           "tray"
@@ -285,7 +286,7 @@
             "warning" = 30;
             "critical" = 15;
           };
-          "format" = "{capacity}% {icon}";
+          "format" = "{icon} {capacity}%";
           "format-charging" = " {capacity}%";
           "format-plugged" = " {capacity}%";
           "format-alt" = "{icon} {time}";
@@ -296,6 +297,7 @@
             ""
             ""
           ];
+          "on-click" = "bash $HOME/.config/hypr/scripts/rofi-battery";
         };
 
         "backlight/slider" = {

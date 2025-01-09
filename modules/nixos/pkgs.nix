@@ -9,7 +9,6 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-    _1password-gui
     # System
     clang-tools
     gcc
@@ -21,14 +20,24 @@
     wireguard-tools
     inetutils
 
+    xfce.xfce4-settings
+    xfce.xfce4-power-manager
+    xfce.libxfce4ui
+    xfce.libxfce4util
+    dbus
+    glib
+    gtk3
+
     # Development
     atac
     redis
     heroku
     kitty
     openssh
+    postman
 
     # CLI
+    acpi
     age
     atuin
     bat
@@ -58,11 +67,23 @@
     ollama
 
     # Additional
+    _1password-gui
+    gum
+    spotify
+    flameshot
+    vlc
+
+    # Browsers
     firefox
     google-chrome
+
+    #Productivity
     obsidian
+    notion
+
+    # Social
     telegram-desktop
-    gum
+    discord
 
     # LSP Servers
     nil
@@ -83,23 +104,19 @@
     };
   };
 
-  environment.etc."home/${username}/.config/hypr/scripts/rofi-askpass" = {
-    source = "/home/${username}/.config/hypr/scripts/rofi-askpass";
-    mode = "0755"; # Readable and executable by the owner and others
-  };
-
-  environment.variables = {
-    SSH_ASKPASS = lib.mkForce "$HOME/.config/hypr/scripts/rofi-askpass";
-    SUDO_ASKPASS = lib.mkForce "$HOME/.config/hypr/scripts/rofi-askpass";
-  };
-
-  environment.sessionVariables = {
-    WLR_NO_HARDWARE_CURSORS = "1";
-    # NIXOS_OZONE_WL = "1";
-    # XDG_SESSION_TYPE = "wayland";
-    # XDG_CURRENT_DESKTOP = "Hyprland";
-    # WLR_DRM_DEVICES = "/dev/dri/card0";
-    # SDL_VIDEODRIVER = "wayland";
+  environment = {
+    pathsToLink = [ "/share/zsh" ];
+    variables = {
+      SSH_ASKPASS = lib.mkForce "$HOME/.config/hypr/scripts/rofi-askpass";
+      SUDO_ASKPASS = lib.mkForce "$HOME/.config/hypr/scripts/rofi-askpass";
+    };
+    sessionVariables = {
+      WLR_NO_HARDWARE_CURSORS = "1";
+    };
+    etc."home/${username}/.config/hypr/scripts/rofi-askpass" = {
+      source = "/home/${username}/.config/hypr/scripts/rofi-askpass";
+      mode = "0755"; # Readable and executable by the owner and others
+    };
   };
 
   hardware = {
@@ -124,7 +141,11 @@
         wayland.enable = true;
       };
     };
+    # xserver.displayManager = {
+    #   gdm = {
+    #     enable = true;
+    #     wayland = true;
+    #   };
+    # };
   };
-
-  environment.pathsToLink = [ "/share/zsh" ];
 }

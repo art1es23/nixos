@@ -164,6 +164,7 @@ button:hover {
   border-radius: 35px;
 }
 
+#battery,
 #network,
 #pulseaudio,
 #wireplumber,

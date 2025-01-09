@@ -21,8 +21,8 @@
       ];
 
       "$terminal" = "kitty";
-      "$fileManager" = "nautilus";
-      "$menu" = "rofi -show drun -show-icons";
+      "$fileManager" = "bash kitty yazi";
+      "$menu" = "bash $HOME/.config/hypr/scripts/rofi-launcher";
       "$mod" = "SUPER";
 
       "exec-once" = [
@@ -33,6 +33,7 @@
         "wl-clipboard"
         "$terminal"
         "firefox"
+        "$fileManager"
         "telegram-desktop"
       ];
     };
