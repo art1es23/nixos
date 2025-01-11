@@ -4,9 +4,6 @@ local function lsp_keymaps(keymaps)
   local keys = require("lazyvim.plugins.lsp.keymaps").get()
   vim.list_extend(keys, keymaps)
 end
--- CSS classes usually have dashes in them, so the whole class name should be
--- considered as a word
--- vim.opt_local.iskeyword:append("-")
 
 local M = {}
 local opts = { noremap = true, silent = true }
@@ -14,35 +11,34 @@ local opts = { noremap = true, silent = true }
 local builtin = require("telescope.builtin")
 
 -- [[ Basic Keymaps ]]
---  See `:help keymap.set()`
 ---@type LazyKeysSpec[]
 M.generals = {
   -- TIP: Disable arrow keys in normal mode
-  { "<left>", "<cmd>echo 'Use h to move'<CR>" },
+  { "<left>", "<cmd>echo 'Use askdjklashjdk h to move'<CR>" },
   { "<right>", "<cmd>echo 'Use l to move'<CR>" },
   { "<up>", "<cmd>echo 'Use k to move'<CR>" },
   { "<down>", "<cmd>echo 'Use j to move'<CR>" },
-
+  -- { "<C-j>", ":echo \"Ctrl+j\"<CR>", unpack(opts), mode = {"n"} },
   -- Reset
   { "q", "<nop>" },
   { "gt", "<nop>" },
   { "gT", "<nop>" },
 
   -- Reset window navigation
-  { "<c-h>", nil, mode = { "n", "t" } },
-  { "<c-j>", nil, mode = { "n", "t" } },
-  { "<c-k>", nil, mode = { "n", "t" } },
-  { "<c-l>", nil, mode = { "n", "t" } },
+  { "<C-h>", nil, mode = { "n", "t" } },
+  { "<C-j>", nil, mode = { "n", "t" } },
+  { "<C-k>", nil, mode = { "n", "t" } },
+  { "<C-l>", nil, mode = { "n", "t" } },
 
   -- Reset terminal navigation
-  { "<c-w>", "<c-w>", mode = { "t" } },
+  { "<C-w>", "<C-w>", mode = { "t" } },
 
   -- Selection
-  { "<cmd-a>", "gg<S-v>G", mode = { "n" } },
+  { "<C-a>", "gg<S-v>G", mode = {"n", "i"} },
 
   -- Default keymaps
-  { "<Esc>", "<cmd>nohlsearch<CR>", mode = { "n" } },
   { "jj", "<Esc>", mode = { "i" } },
+  { "<Esc>", "<cmd>nohlsearch<CR>", mode = { "n" } },
 
   -- Quit
   { "<leader>qq", "<cmd>qa<cr>", mode = { "n" }, desc = "Quit All" },
@@ -200,48 +196,12 @@ M.generals = {
     end,
     expr = true,
     buffer = true,
-  },
-
-  -- -- Reset lazyvim lazygit
-  -- {
-  --   "<leader>gg",
-  --   function()
-  --     LazyVim.terminal.open("lazygit", {
-  --       esc_esc = false,
-  --       border = "none",
-  --       size = { width = 1, height = 1 },
-  --     })
-  --   end,
-  --   desc = "Lazygit",
-  -- },
-  --
-  -- -- Reset lazyvim float term
-  -- { "<leader>ft", nil },
-  -- { "<leader>fT", nil },
-  -- { "<c-/>", nil, mode = { "n", "t" } },
-  -- {
-  --   "<c-\\>",
-  --   function()
-  --     LazyVim.terminal(nil)
-  --   end,
-  -- },
-  -- {
-  --   "<c-\\>",
-  --   function()
-  --     LazyVim.terminal(nil)
-  --   end,
-  --   mode = { "t" },
-  -- },
-  --
-  -- -- Remap macrp record key
-  -- { "Q", "q" },
+  }
 }
 
 ---@type LazyPluginSpec[]
 M.plugins = {
   { import = "plugins.extras.keymap.copy-lines-action" },
-  --   -- { import = "plugins.extras.keymap.superkey" },
-
   {
     "hop.nvim",
     keys = {
@@ -396,23 +356,6 @@ M.plugins = {
       })
     end,
   },
-  --   {
-  --     "grug-far.nvim",
-  --     keys = {
-  --       {
-  --         "<leader>sf",
-  --         ':lua require("grug-far").grug_far({ prefills = { flags = vim.fn.expand("%") } })<CR>',
-  --         desc = "Search on current file",
-  --       },
-  --       {
-  --         "<leader>sf",
-  --         ':<C-u>lua require("grug-far").with_visual_selection({ prefills = { flags = vim.fn.expand("%") } })<CR>',
-  --         desc = "Search on current file",
-  --         mode = { "v" },
-  --       },
-  --     },
-  --   },
-  --
   {
     "folke/flash.nvim",
     keys = {
@@ -471,12 +414,6 @@ M.plugins = {
       },
     },
   },
-  --   {
-  --     "folke/zen-mode.nvim",
-  --     keys = {
-  --       { "<leader>wo", ":ZenMode<cr>", desc = "Zen Mode" },
-  --     },
-  --   },
   {
     "abecodes/tabout.nvim",
     keys = {
@@ -506,12 +443,10 @@ M.plugins = {
       { "<leader>fg", builtin.live_grep, desc = "[S]earch by [G]rep", mode = { "n" } },
       { "<leader>fd", builtin.diagnostics, desc = "[S]earch [D]iagnostics", mode = { "n" } },
       { "<leader><leader>", builtin.buffers, desc = "[ ] Find existing buffers", mode = { "n" } },
-      -- Slightly advanced example of overriding default behavior and theme
       {
         "<leader>/",
         mode = { "n" },
         function()
-          -- You can pass additional configuration to Telescope to change the theme, layout, etc.
           builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
             winblend = 10,
             previewer = false,
@@ -519,9 +454,6 @@ M.plugins = {
         end,
         desc = "[/] Fuzzily search in current buffer",
       },
-
-      -- It's also possible to pass additional configuration options.
-      --  See `:help telescope.builtin.live_grep()` for information about particular keys
       {
         "<leader>s/",
         mode = { "n" },
@@ -533,7 +465,6 @@ M.plugins = {
         end,
         desc = "[S]earch [/] in Open Files",
       },
-
       -- Shortcut for searching your Neovim configuration files
       {
         "<leader>sn",
@@ -543,10 +474,8 @@ M.plugins = {
         end,
         desc = "[S]earch [N]eovim files",
       },
-
       -- Diagnostic keymaps
       { "<leader>q", mode = { "n" }, vim.diagnostic.setloclist, desc = "Open diagnostic [Q]uickfix list" },
-
       -- Media searching
       {
         "<leader>sm",
@@ -579,7 +508,6 @@ M.plugins = {
       })
     end,
   },
-
   {
     "dyng/ctrlsf.vim",
     config = function()
@@ -595,14 +523,6 @@ M.plugins = {
         -- Run the CtrlSF command with the search term
         vim.cmd("CtrlSF " .. search_term)
       end, { desc = "Find variable" })
-      -- vim.keymap.set("n", "<leader>Fo", "<cmd>CtrlSFOpen<CR>")
-      -- vim.keymap.set("n", "<leader>Fs", "<cmd>CtrlSFStop<CR>")
-      -- vim.keymap.set("n", "<leader>Fx", "<cmd>CtrlSFClose<CR>")
-      -- vim.keymap.set("n", "<leader>Ff", "<cmd>CtrlSFFocus<CR>")
-      -- vim.keymap.set("n", "<leader>Ft", "<cmd>CtrlSFToggle<CR>")
-      -- vim.keymap.set("n", "<leader>Fu", "<cmd>CtrlSFUpdate<CR>")
-      -- vim.keymap.set("n", "<leader>Fd", "<cmd>CtrlSFClearHL<CR>")
-      -- vim.keymap.set("n", "<leader>Fq", "<cmd>CtrlSFQuickfix<CR>")
     end,
   },
 }

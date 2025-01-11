@@ -1,4 +1,5 @@
-local actions = require("telescope.actions")
+-- local actions = require("telescope.actions")
+local builtin = require("telescope.builtin")
 
 return {
   "nvim-telescope/telescope.nvim",
@@ -10,34 +11,9 @@ return {
     "nvim-telescope/telescope-ui-select.nvim",
     { "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
     "folke/todo-comments.nvim",
-    "nvim-telescope/telescope-media-files.nvim",
   },
   opts = {
     defaults = {
-      -- preview = {
-      --   mime_hook = function(filepath, bufnr, opts)
-      --     local is_image = function(filepath)
-      --       local image_extensions = { "png", "jpg" } -- Supported image formats
-      --       local split_path = vim.split(filepath:lower(), ".", { plain = true })
-      --       local extension = split_path[#split_path]
-      --       return vim.tbl_contains(image_extensions, extension)
-      --     end
-      --     if is_image(filepath) then
-      --       local term = vim.api.nvim_open_term(bufnr, {})
-      --       local function send_output(_, data, _)
-      --         for _, d in ipairs(data) do
-      --           vim.api.nvim_chan_send(term, d .. "\r\n")
-      --         end
-      --       end
-      --       vim.fn.jobstart({
-      --         "catimg",
-      --         filepath, -- Terminal image viewer command
-      --       }, { on_stdout = send_output, stdout_buffered = true, pty = true })
-      --     else
-      --       require("telescope.previewers.utils").set_preview_message(bufnr, opts.winid, "Binary cannot be previewed")
-      --     end
-      --   end,
-      -- },
       vimgrep_arguments = {
         "rg",
         "--color=never",
@@ -84,16 +60,16 @@ return {
       buffers = {
         sort_mru = true,
         ignore_current_buffer = true,
-        mappings = {
-          i = {
-            ["<Tab>"] = actions.move_selection_next,
-            ["<S-Tab>"] = actions.move_selection_previous,
-          },
-          n = {
-            ["<Tab>"] = actions.move_selection_next,
-            ["<S-Tab>"] = actions.move_selection_previous,
-          },
-        },
+        -- mappings = {
+        --   i = {
+        --     ["<Tab>"] = actions.move_selection_next,
+        --     ["<S-Tab>"] = actions.move_selection_previous,
+        --   },
+        --   n = {
+        --     ["<Tab>"] = actions.move_selection_next,
+        --     ["<S-Tab>"] = actions.move_selection_previous,
+        --   },
+        -- },
       },
     },
     extensions = {
@@ -103,17 +79,71 @@ return {
         override_file_sorter = true, -- override the file sorter
         case_mode = "smart_case", -- or "ignore_case" or "respect_case"
       },
-      ["ui-select"] = {
-        require("telescope.themes").get_cursor(),
-        require("telescope.themes").get_dropdown(),
-      },
+      -- ["ui-select"] = {
+      --   require("telescope.themes").get_cursor(),
+      --   require("telescope.themes").get_dropdown(),
+      -- },
       media_files = {
-        -- filetypes whitelist
-        -- defaults to {"png", "jpg", "mp4", "webm", "pdf"}
+        -- Filetypes whitelist
         filetypes = { "png", "webp", "jpg", "jpeg", "mp4", "webm", "pdf" },
-        -- find command (defaults to `fd`)
+        -- Find command (defaults to `fd`)
         find_cmd = "fzf",
       },
+    },
+  },
+  keys = {
+    { "<leader>ff", builtin.find_files, desc = "[F]ind [F]iles", mode = {"n"} },
+    { "<leader>fh", builtin.help_tags, desc = "[F]ind [H]elp", mode = { "n" } },
+    { "<leader>fk", builtin.keymaps, desc = "[F]ind [K]eymaps", mode = { "n" } },
+    { "<leader>fw", builtin.grep_string, desc = "[F]ind current [W]ord", mode = { "n" } },
+    { "<leader>fg", builtin.live_grep, desc = "[F]ind by [G]rep", mode = { "n" } },
+    { "<leader>fd", builtin.diagnostics, desc = "[F]ind [D]iagnostics", mode = { "n" } },
+    { "<leader><leader>", builtin.buffers, desc = "Find existing buffers", mode = { "n" } },
+    {
+      "<leader>/",
+      mode = { "n" },
+      function()
+        builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
+          winblend = 10,
+          previewer = false,
+        }))
+      end,
+      desc = "[/] Fuzzily search in current buffer",
+    },
+    {
+      "<leader>f/",
+      mode = { "n" },
+      function()
+        builtin.live_grep({
+          grep_open_files = true,
+          prompt_title = "Live Grep in Open Files",
+        })
+      end,
+      desc = "[F]ind [/] in Open Files",
+    },
+    -- Shortcut for searching your Neovim configuration files
+    {
+      "<leader>fn",
+      mode = { "n" },
+      function()
+        builtin.find_files({ cwd = vim.fn.stdpath("config") })
+      end,
+      desc = "[F]ind [N]eovim files",
+    },
+    -- Diagnostic keymaps
+    { "<leader>qd", mode = { "n" }, vim.diagnostic.setloclist, desc = "Open diagnostic [Q]uickfix list" },
+    -- Media searching
+    {
+      "<leader>fm",
+      "<cmd>lua require('telescope').extensions.media_files.media_files()<cr>",
+      mode = { "n" },
+      desc = "[F]ind [M]edia files",
+    },
+    {
+      "<leader>fmc",
+      "<cmd>lua require('telescope').extensions.media_files.media_files_console()<cr>",
+      mode = { "n" },
+      desc = "[F]ind [M]edia files to Console",
     },
   },
 }

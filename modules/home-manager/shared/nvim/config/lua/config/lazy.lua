@@ -18,14 +18,15 @@ vim.opt.rtp:prepend(lazypath)
 -- Setup lazy.nvim
 require("lazy").setup({
   spec = {
-    { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+    -- { "LazyVim/LazyVim", import = "lazyvim.plugins" },
     -- import your plugins
     { import = "plugins" },
     { import = "plugins.ui" },
-    { import = "plugins.git" },
     { import = "plugins.format" },
     { import = "plugins.nav" },
-    { import = "plugins.utils" },
+    { import = "plugins.code" },
+    { import = "plugins.git" },
+    { import = "plugins.ai" },
   },
   defaults = {
     lazy = false,

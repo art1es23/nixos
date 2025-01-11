@@ -13,12 +13,15 @@
     clang-tools
     gcc
     cargo
+    lua
+    go
     nodejs
     pciutils
     tcpdump
     lm_sensors
     wireguard-tools
     inetutils
+    gnumake
 
     xfce.xfce4-settings
     xfce.xfce4-power-manager
@@ -93,6 +96,7 @@
     typescript-language-server
     nixfmt-rfc-style
     prettierd
+    eslint_d
   ];
 
   programs = {

@@ -3,6 +3,7 @@
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+-- vim.g.user_emmet_leader_key = '<Tab>'
 
 vim.g.neovide_input_macos_alt_is_meta = true
 -- Set to true if you have a Nerd Font installed and selected in the terminal

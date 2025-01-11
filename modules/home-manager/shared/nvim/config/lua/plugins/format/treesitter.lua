@@ -4,39 +4,36 @@ local ts = {
 	build = ":TSUpdate",
 	lazy = false,
 	dependencies = {
-		-- extra textobjects
+		-- Extra textobjects
 		"nvim-treesitter/nvim-treesitter-textobjects",
-		-- commenting for vue SFCs
+		-- Commenting for vue SFCs
 		{
 			"JoosepAlviste/nvim-ts-context-commentstring",
-			ft = { "vue" },
+			ft = { "html", "vue", "react" },
 			init = function()
 				vim.g.skip_ts_context_commentstring_module = true
 			end,
 			config = true,
 		},
-		-- auto insert closing tags
+		-- Auto insert closing tags
 		{
-			-- https://github.com/windwp/nvim-ts-autotag
 			"windwp/nvim-ts-autotag",
-			opts = {
-				enable_close_on_slash = false, -- disable case: `<div /` become `<div /div>`
-				filetypes = {
-					"html",
-					"javascript",
-					"javascriptreact",
-					"typescript",
-					"typescriptreact",
-					"vue",
-					"xml",
-				},
-			},
+			config = function()
+				require("nvim-ts-autotag").setup({
+					enable_close_on_slash = false, -- disable case: `<div /` becomes `<div /div>`
+					filetypes = {
+						"html",
+						"javascript",
+						"javascriptreact",
+						"typescript",
+						"typescriptreact",
+						"vue",
+						"xml",
+					},
+				})
+			end,
 		},
 	},
-	-- init = function()
-	-- 	vim.opt.foldmethod = "expr" -- use function to determine folds
-	-- 	vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- use TS for folding
-	-- end,
 	opts = {
 		-- either "all" or a list of languages
 		ensure_installed = {
@@ -66,15 +63,10 @@ local ts = {
 		indent = {
 			enable = true,
 		},
-		-- Install parsers synchronously (only applied to `ensure_installed`)
-		sync_install = false,
-
-		-- Automatically install missing parsers when entering buffer
-		-- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-		auto_install = true,
-		-- custom text objects
+		sync_install = false, -- Install parsers synchronously (only applied to `ensure_installed`)
+		auto_install = true, -- Automatically install missing parsers when entering buffer
 		textobjects = {
-			-- change/delete/select in function or class
+			-- custom text objects
 			select = {
 				enable = true,
 				lookahead = true,
@@ -85,7 +77,6 @@ local ts = {
 					["ic"] = "@class.inner",
 				},
 			},
-			-- easily move to next function/class
 			move = {
 				enable = true,
 				set_jumps = true, -- track in jumplist (<C-o>, <C-i>)
@@ -106,7 +97,6 @@ local ts = {
 					["()"] = "@class.outer",
 				},
 			},
-			-- peek definitions from LSP
 			lsp_interop = {
 				enable = true,
 				border = "single",
@@ -118,55 +108,16 @@ local ts = {
 			swap = {
 				enable = true,
 				swap_next = {
-					["<M-j>"] = "@parameter.inner",
+					["<Alt-j>"] = "@parameter.inner",
 				},
 				swap_previous = {
-					["<M-k>"] = "@parameter.outer",
+					["<Alt-k>"] = "@parameter.outer",
 				},
 			},
-		},
-		autotag = {
-			enable = true,
-			filetypes = { "html", "vue" },
 		},
 	},
 }
 
--- local ts_context = {
--- 	"nvim-treesitter/nvim-treesitter-context",
--- 	init = function()
--- 		vim.api.nvim_set_hl(0, "TreesitterContextBottom", {
--- 			underline = true,
--- 			sp = "Grey",
--- 		})
--- 		vim.api.nvim_set_hl(0, "TreesitterContextLineNumberBottom", {
--- 			underline = true,
--- 			sp = "Grey",
--- 		})
--- 	end,
--- 	opts = {
--- 		enable = false,
--- 		max_lines = 5, -- How many lines the window should span
--- 		min_window_height = 25,
--- 		line_numbers = true,
--- 		multiline_threshold = 5, -- Maximum number of lines to show for a single context
--- 		trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
--- 		mode = "topline", -- Line used to calculate context. Choices: 'cursor', 'topline'
--- 	},
--- 	keys = {
--- 		{
--- 			"<Leader>tc",
--- 			"<cmd>TSContextToggle<CR>",
--- 			desc = "Toggle treesitter context",
--- 		},
--- 	},
--- 	cmd = {
--- 		"TSContextEnable",
--- 		"TSContextToggle",
--- 	},
--- }
---
 return {
 	ts,
-	-- ts_context,
 }

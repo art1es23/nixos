@@ -17,7 +17,7 @@ export PATH="$PATH:$HOME/.flutter/bin"
 export PATH="$PATH:$BUN_INSTALL/bin"
 export PATH="$PATH:$HOME/neovim/bin"
 export PATH="$PATH:/opt/homebrew/opt/ruby/bin"
-export SESSION_MANAGER="unix:path=/run/user/1000/bus"
+export SESSION_MANAGER="unix:path=/run/user/1000/bus" #### FIXME
 
 # Antigen
 source "$ZSH/plugins/antigen.zsh"
