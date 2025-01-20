@@ -1,0 +1,36 @@
+// vim:ft=rasi
+* {
+  font:                   "hack 10";
+  foreground:             #D8DEE9;
+  background:             #1A1B26B3;
+  highlight:              #33CCFF;
+  active:                 #6E77FF;
+  urgent:                 #8E3596;
+
+  pink:                   #D99887;
+  old-highlight:          #F1594F;
+  red:                    #973D46;
+  darkred:                #973D46;
+  yellow:                 #F2C395;
+  darkyellow:             #E0AE4A;
+  lightblue:              #888CA7;
+  oldforeground:          #87A2AA;
+  altblue:                #ACBAF9;
+  altwhite:               #F1D8D4;
+  white:                  #F5F5F5;
+
+  bg0:                    #1A1B26;
+  bg1:                    #3B4252;
+  bg2:                    #4C566A80;
+  bg3:                    #33CCFF80;
+
+  fg0:                    #D8DEE9;
+  fg1:                    #ECEFF4;
+  fg2:                    #4C566A;
+
+  lightgray:              #777777;
+  mediumgray:             #454545;
+  darkgray:               #232323;
+  black:                  #111111;
+  darkblack:              #000000;
+}

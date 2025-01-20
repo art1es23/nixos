@@ -201,7 +201,7 @@
           "format" = "{icon}";
           "format-icons" = " ";
           "exec-on-event" = "true";
-          "on-click" = "bash $HOME/.config/hypr/scripts/rofi-power";
+          "on-click" = "bash $HOME/.config/rofi/scripts/rofi-power";
           "tooltip" = false;
           # "tooltip-format" = "Power Menu";
         };
@@ -218,7 +218,7 @@
           "format" = "{icon}";
           "format-icons" = "";
           "exec-on-event" = "true";
-          "on-click" = "bash $HOME/.config/hypr/scripts/rofi-bluetooth";
+          "on-click" = "bash $HOME/.config/rofi/scripts/rofi-bluetooth";
           "tooltip-format" = "Bluetooth Menu";
         };
 
@@ -226,7 +226,7 @@
           "format" = "{icon}";
           "format-icons" = "";
           "exec-on-event" = "true";
-          "on-click" = "bash $HOME/.config/hypr/scripts/rofi-wifi";
+          "on-click" = "bash $HOME/.config/rofi/scripts/rofi-wifi";
           "tooltip-format" = "Wifi Menu";
         };
 
@@ -297,7 +297,7 @@
             ""
             ""
           ];
-          "on-click" = "bash $HOME/.config/hypr/scripts/rofi-battery";
+          "on-click" = "bash $HOME/.config/rofi/scripts/rofi-battery";
         };
 
         "backlight/slider" = {

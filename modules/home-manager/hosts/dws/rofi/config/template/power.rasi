@@ -1,0 +1,37 @@
+// vim:ft=rasi
+
+@import "themes/default.rasi"
+
+configuration {
+    show-icons:                 false;
+}
+
+mainbox {
+    orientation:                 horizontal;
+    children:                    [ "imagebox", "listview" ];
+}
+
+inputbar {
+    children:                    [ "dummy", "prompt", "dummy"];
+}
+
+listview {
+    columns:                     2;
+    lines:                       3;
+    spacing:                     30px;
+    margin:                      30px;
+}
+
+element {
+    padding:                     40px 10px;
+    background-color:            @active; 
+}
+
+element-text {
+    font:                        "hack 32";
+}
+
+element normal.normal {
+    background-color:            var(active);
+}
+

@@ -1,0 +1,4 @@
+// vim:ft=rasi
+/* Selected Color Scheme */
+
+@import "colors/tokyo-night.rasi"

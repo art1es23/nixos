@@ -6,7 +6,7 @@
 ## Rofi   : Power Menu
 
 # Current Theme
-dir="$HOME/.config/hypr/rofi"
+dir="$HOME/.config/rofi/template"
 theme='power'
 
 # CMDs

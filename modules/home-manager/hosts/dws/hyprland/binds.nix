@@ -55,6 +55,7 @@
       "$mod, mouse_up, workspace, e-1"
       # Waybar switching
       "$mod, W, exec, pkill -SIGUSR1 waybar"
+      # "..., exec, XDG_CURRENT_DESKTOP=Hyprland flameshot gui"
     ];
 
     # Move/resize windows with mainMod + LMB/RMB and dragging

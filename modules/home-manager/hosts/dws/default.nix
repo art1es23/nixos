@@ -2,9 +2,11 @@
 
 {
   imports = [
+    ./rofi
     ./hyprland
     ./waybar
     ./dunst
+    ./flameshot.nix
   ];
 
   home.packages = with pkgs; [
@@ -18,10 +20,15 @@
     rofi-bluetooth
     rofi-pulse-select
     rofi-screenshot
+    rofi-emoji
+    rofi-vpn
+    rofi-calc
     # ulauncher
     hypridle
     hyprlock
     hyprpicker
+    hyprpolkitagent
+    hyprutils
     wl-clipboard
 
     cliphist

@@ -6,7 +6,7 @@
 ## Applets : Battery
 
 # Import Current Theme
-source "$HOME"/.config/hypr/rofi/shared/theme.bash
+source "$HOME"/.config/rofi/template/shared/theme.bash
 theme="$type/$style"
 
 # Battery Info

@@ -38,6 +38,7 @@
     kitty
     openssh
     postman
+    live-server
 
     # CLI
     acpi
@@ -73,8 +74,11 @@
     _1password-gui
     gum
     spotify
-    flameshot
     vlc
+    libreoffice-qt
+    hunspell
+    hunspellDicts.uk_UA
+    hunspellDicts.en_US
 
     # Browsers
     firefox
@@ -111,14 +115,14 @@
   environment = {
     pathsToLink = [ "/share/zsh" ];
     variables = {
-      SSH_ASKPASS = lib.mkForce "$HOME/.config/hypr/scripts/rofi-askpass";
-      SUDO_ASKPASS = lib.mkForce "$HOME/.config/hypr/scripts/rofi-askpass";
+      SSH_ASKPASS = lib.mkForce "$HOME/.config/rofi/scripts/rofi-askpass";
+      SUDO_ASKPASS = lib.mkForce "$HOME/.config/rofi/scripts/rofi-askpass";
     };
     sessionVariables = {
       WLR_NO_HARDWARE_CURSORS = "1";
     };
-    etc."home/${username}/.config/hypr/scripts/rofi-askpass" = {
-      source = "/home/${username}/.config/hypr/scripts/rofi-askpass";
+    etc."home/${username}/.config/rofi/scripts/rofi-askpass" = {
+      source = "/home/${username}/.config/rofi/scripts/rofi-askpass";
       mode = "0755"; # Readable and executable by the owner and others
     };
   };

@@ -6,11 +6,26 @@
       # variables = [ "--all" ];
     };
     settings = {
-      monitor = ",preferred,auto,1";
+      "$screen1" = "eDP-1";
+      "$screen2" = "HDMI-A-1";
+
+      monitor = [
+        "$screen1,1920x1080@60.00Hz,0x0,1"
+        "$screen2,3840x2160@60.00Hz,-3072x0,1.25"
+      ];
+
+      workspace = [
+        "1,monitor:$screen2,default:true"
+        "2,monitor:$screen2,default:true"
+        "3,monitor:$screen2,default:true"
+        "5,monitor:$screen1,default:true"
+        "6,monitor:$screen1,default:true"
+        "8,monitor:$screen1,default:true"
+      ];
 
       env = [
-        "XCURSOR_SIZE,22"
-        "HYPRCURSOR_SIZE,22"
+        "XCURSOR_SIZE,26"
+        "HYPRCURSOR_SIZE,26"
         # Hint Electron apps to use Wayland
         "NIXOS_OZONE_WL,1"
         "XDG_CURRENT_DESKTOP,Hyprland"
@@ -22,7 +37,7 @@
 
       "$terminal" = "kitty";
       "$fileManager" = "bash kitty yazi";
-      "$menu" = "bash $HOME/.config/hypr/scripts/rofi-launcher";
+      "$menu" = "bash $HOME/.config/rofi/scripts/rofi-launcher";
       "$mod" = "SUPER";
 
       "exec-once" = [

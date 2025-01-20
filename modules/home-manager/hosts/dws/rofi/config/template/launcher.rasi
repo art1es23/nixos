@@ -1,0 +1,23 @@
+// vim:ft=rasi
+@import "themes/default.rasi"
+
+window {
+    enabled:                     true;
+}
+
+mainbox {
+    padding:                     20px;
+    children:                    [ "inputbar", "listview" ];
+}
+
+scrollbar {
+    handle-width:                5px ;
+    handle-color:                @highlight;
+    border-radius:               0px;
+    background-color:            @bg1;
+}
+
+element {
+    spacing:                     15px;
+    orientation:                 vertical;
+}

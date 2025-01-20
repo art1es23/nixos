@@ -75,7 +75,7 @@
 #   elif nmcli -f BSSID,SECURITY dev wifi list | grep -w "$bssid" | awk '{print $2}' | grep -q -- "--"; then
 #     pass=""
 #   else
-#     pass=$(rofi -dmenu -l 1 -config "$HOME/.config/hypr/rofi/regular.rasi" -p " Enter Password")
+#     pass=$(rofi -dmenu -l 1 -config "$HOME/.config/rofi/template/regular.rasi" -p " Enter Password")
 #     if [ -z "$pass" ]; then
 #       exit 0
 #     fi
@@ -97,7 +97,7 @@
 # }
 #
 # # Show menu and handle user choice
-# case=$(echo -e "$options" | rofi -dmenu -l 6 -i -config "$HOME/.config/hypr/rofi/regular.rasi" -p "  WiFi Settings")
+# case=$(echo -e "$options" | rofi -dmenu -l 6 -i -config "$HOME/.config/rofi/template/regular.rasi" -p "  WiFi Settings")
 # if [ -z "$case" ]; then
 #   exit 0
 # fi
@@ -140,7 +140,7 @@ connect_wifi() {
         wifi_list="󰖩  $current [Connected]\n$wifi_list"
     fi
 
-    choice=$(echo -e "$toggle\n$wifi_list" | uniq -u | rofi -dmenu -i -p "  Wifi" -selected-row 1 -config "$HOME/.config/hypr/rofi/regular.rasi")
+    choice=$(echo -e "$toggle\n$wifi_list" | uniq -u | rofi -dmenu -i -p "  Wifi" -selected-row 1 -config "$HOME/.config/rofi/template/regular.rasi")
 
     if [ -z "$choice" ]; then
         exit
@@ -163,7 +163,7 @@ connect_wifi() {
             nmcli connection up id "$ssid" | grep "successfully" && notify-send "Connection Established" "Connected to $ssid" -t 5000 -r 9991 && exit
         fi
         if [[ "$choice" =~ "" ]]; then
-            password=$(rofi -dmenu -p "Password: " -l 0 -config "$HOME/.config/hypr/rofi/regular.rasi")
+            password=$(rofi -dmenu -p "Password: " -l 0 -config "$HOME/.config/rofi/template/regular.rasi")
         fi
         if nmcli device wifi connect "$ssid" password "$password" | grep "successfully"; then
             notify-send "Connection Established" "Connected to $ssid" -t 5000 -r 9991
@@ -185,7 +185,7 @@ fi
 if [ "$flag" -eq 1 ]; then
     connect_wifi
 else
-    choice=$(echo -e "$toggle" | rofi -dmenu -i -p "  Wifi" -config "$HOME/.config/hypr/rofi/regular.rasi")
+    choice=$(echo -e "$toggle" | rofi -dmenu -i -p "  Wifi" -config "$HOME/.config/rofi/template/regular.rasi")
     if [[ "$choice" = "$toggle" ]]; then
         nmcli radio wifi on
         toggle="󰖪  Disable Wi-Fi"

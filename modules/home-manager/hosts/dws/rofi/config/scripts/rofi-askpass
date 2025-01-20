@@ -2,6 +2,6 @@
 # FIXME: Need to change title from 'Password' to dynamic
 
 rofi -dmenu -password -i -no-fixed-num-lines -p "Password:" \
-    -theme $HOME/.config/hypr/rofi/askpass.rasi
+    -theme $HOME/.config/rofi/template/askpass.rasi
 
 # rofi -dmenu -p "Password: " -l 0 -config "$HOME/.config/hypr/rofi/regular.rasi"

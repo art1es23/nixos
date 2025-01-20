@@ -28,10 +28,10 @@ map({ "n", "t" }, "<C-k>", "<C-w>k", { desc = "Go to above window" })
 map({ "n", "t" }, "<C-l>", "<C-w>l", { desc = "Go to right window" })
 
 -- Resize window
--- map("n", "<C-leader><Left>", "<C-w><", { desc = "Increase window size left" })
--- map("n", "<C-leader><Right>", "<C-w>>", { desc = "Increase window size right" })
--- map("n", "<C-leader><Up>", "<C-w>+", { desc = "Increase window size up" })
--- map("n", "<C-leader><Down>", "<C-w>-", { desc = "Increase window size down" })
+map("n", "<C-w><left>", "<C-w><", { desc = "Increase window size left" })
+map("n", "<C-w><right>", "<C-w>>", { desc = "Increase window size right" })
+map("n", "<C-w><up>", "<C-w>+", { desc = "Increase window size up" })
+map("n", "<C-w><down>", "<C-w>-", { desc = "Increase window size down" })
 
 -- Tabs
 map("n", "te", "tabedit", { desc = "Edit tab" })
@@ -74,6 +74,9 @@ end, { desc = "Function Start" })
 map("n", "]]", function()
   vim.fn.search("^<(template)<bar>script<bar>style", "W")
 end, { desc = "Function End" })
+
+-- Live Server
+vim.keymap.set("n", "<leader>ls", ":split | term live-server<CR>", { desc = "Enable [L]ive [S]erver", noremap = true, silent = true })
 
 -- ## PLUGINS ## --
 -- SSR

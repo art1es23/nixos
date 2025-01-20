@@ -1,0 +1,60 @@
+// vim:ft=rasi
+@import                          "themes/default.rasi"
+
+configuration {
+    show-icons:                 false;
+}
+
+window {
+    location:                    east;
+    anchor:                      east;
+    width:                       120px;
+    x-offset:                    -20px;
+    y-offset:                    0px;
+    border-radius:               100%;
+}
+
+mainbox {
+    padding:                     15px;
+    children:                    [ "listview" ];
+}
+
+listview {
+    columns:                     6;
+    lines:                       1;
+    spacing:                     15px;
+}
+
+element {
+    padding:                     23px 10px;
+    border-radius:               100%;
+}
+
+element-text {
+    font:                        "hack 24";
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color:            var(bg2);
+    text-color:                  var(foreground);
+}
+
+element normal.urgent,
+element alternate.urgent,
+element selected.active {
+    background-color:            var(urgent);
+    text-color:                  var(background);
+}
+
+element normal.active,
+element alternate.active,
+element selected.urgent {
+    background-color:            var(active);
+    text-color:                  var(background);
+}
+
+element selected.normal {
+    background-color:            var(highlight);
+    text-color:                  var(background);
+}

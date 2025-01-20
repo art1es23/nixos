@@ -1,4 +1,4 @@
 ## Current Theme
 
-type="$HOME/.config/hypr/rofi"
+type="$HOME/.config/rofi/template"
 style='applets.rasi'

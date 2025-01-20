@@ -1,0 +1,4 @@
+// vim:ft=rasi
+
+@import "themes/default.rasi"
+@import "themes/layout.rasi"
