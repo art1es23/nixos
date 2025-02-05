@@ -159,6 +159,10 @@ alias cz="vim ~/.config/zsh"
 
 alias visudo="sudo -E visudo"
 
+alias d="ddgr"
+
+alias jl="jless"
+
 # NVM
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

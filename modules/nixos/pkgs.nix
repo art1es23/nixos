@@ -22,6 +22,11 @@
     wireguard-tools
     inetutils
     gnumake
+    pandoc
+    exiftool
+    xlsx2csv
+    catdoc
+    odt2txt
 
     xfce.xfce4-settings
     xfce.xfce4-power-manager
@@ -31,66 +36,119 @@
     glib
     gtk3
 
-    # Development
-    atac
-    redis
-    heroku
-    kitty
-    openssh
-    postman
-    live-server
+    hunspell
+    hunspellDicts.uk_UA
+    hunspellDicts.en_US
 
-    # CLI
-    acpi
+    # Dev environment
+    kitty
+    oh-my-posh
+    neovim
+    meld
+    tmux
+
+    # CLI Tools
     age
     atuin
     bat
     curl
     direnv
     eza
-    fastfetch
+    eget
     fd
-    fx
+    ffmpeg
     fzf
-    glow
+    glow # Markdown preview
     jq
-    neovim
+    jql
+    jless
+    navi # Interactive cheatsheet tool
     nh
-    oh-my-posh
-    lazygit
-    lazydocker
+    restic # Backup tool
     ripgrep
     thefuck
-    tmux
-    unzip
+    tldr
+    sttr # Change text format
     wget
+    xh
     zoxide
+
+    #CLI Development
+    asdf-vm
+    atac
+    csvlens
+    gama # Managing Github Actions
+    gitnr # .gitignore generator
+    redis
+    harlequin # SQL IDE
+    heroku
+    openssh
+    k9s
+    # kaskade # TUI Apache Kafka
+    koji # git-commits generator
+    ktop
+    lazygit
+    lazydocker
+    live-server
+    nap # Code snippets manager
+    rainfrog # Postgres IDE
+    serie # GIT commit tree preview
+    tailspin # Log-previewer
+
+    # CLI Additional
+    acpi # Battery
+    bandwhich
+    btop
+    circumflex # Hackenews
+    croc # Transfering files between PCs
+    ddgr # DuckDuckGo
+    hyperfine # Benchmark for tools/cmds
+    gallery-dl # Image/s download
+    gum
+    fastfetch
+    lychee # Async link checker
+    okular
+    ouch # Compress and decompress files and dirs
+    unar # Archive unpacker
+    upower
+    pik
+    terminaltexteffects
+    typioca # Typing checker
+    scc
+    wiki-tui
+    wiper # Disk analyzer
+    wtf
 
     # AI
     aichat
     ollama
+    oterm
 
     # Additional
     _1password-gui
-    gum
     spotify
     vlc
     libreoffice-qt
-    hunspell
-    hunspellDicts.uk_UA
-    hunspellDicts.en_US
+    gimp
+    figma-linux
+    transmission
 
     # Browsers
     firefox
     google-chrome
 
+    # Development
+    postman
+
     #Productivity
     obsidian
-    notion
+    # notion
 
     # Social
     telegram-desktop
     discord
+    fractal
+    iamb # Matrix client
 
     # LSP Servers
     nil

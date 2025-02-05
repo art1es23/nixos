@@ -2,10 +2,11 @@
 
 {
   imports = [
+    ./dunst
     ./rofi
     ./hyprland
     ./waybar
-    ./dunst
+    ./wtf
     ./flameshot.nix
   ];
 

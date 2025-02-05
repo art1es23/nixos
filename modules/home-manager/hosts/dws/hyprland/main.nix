@@ -36,7 +36,7 @@
       ];
 
       "$terminal" = "kitty";
-      "$fileManager" = "bash kitty yazi";
+      "$fileManager" = "kitty yazi";
       "$menu" = "bash $HOME/.config/rofi/scripts/rofi-launcher";
       "$mod" = "SUPER";
 
@@ -48,7 +48,6 @@
         "wl-clipboard"
         "$terminal"
         "firefox"
-        "$fileManager"
         "telegram-desktop"
       ];
     };

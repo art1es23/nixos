@@ -1,0 +1,374 @@
+2025/02/03 15:50:07 log.go:23: Protocol version: auto
+2025/02/03 15:50:07 log.go:23: Network: tcp
+2025/02/03 15:52:37 log.go:23: Protocol version: auto
+2025/02/03 15:52:37 log.go:23: Network: tcp
+2025/02/03 15:55:07 log.go:23: Protocol version: auto
+2025/02/03 15:55:07 log.go:23: Network: tcp
+2025/02/03 15:57:37 log.go:23: Protocol version: auto
+2025/02/03 15:57:37 log.go:23: Network: tcp
+2025/02/03 16:00:07 log.go:23: Protocol version: auto
+2025/02/03 16:00:07 log.go:23: Network: tcp
+2025/02/03 16:02:37 log.go:23: Protocol version: auto
+2025/02/03 16:02:37 log.go:23: Network: tcp
+2025/02/03 16:05:07 log.go:23: Protocol version: auto
+2025/02/03 16:05:07 log.go:23: Network: tcp
+2025/02/03 16:07:37 log.go:23: Protocol version: auto
+2025/02/03 16:07:37 log.go:23: Network: tcp
+2025/02/03 16:10:07 log.go:23: Protocol version: auto
+2025/02/03 16:10:07 log.go:23: Network: tcp
+2025/02/03 16:12:37 log.go:23: Protocol version: auto
+2025/02/03 16:12:37 log.go:23: Network: tcp
+2025/02/03 16:15:07 log.go:23: Protocol version: auto
+2025/02/03 16:15:07 log.go:23: Network: tcp
+2025/02/03 16:17:37 log.go:23: Protocol version: auto
+2025/02/03 16:17:37 log.go:23: Network: tcp
+2025/02/03 16:20:07 log.go:23: Protocol version: auto
+2025/02/03 16:20:07 log.go:23: Network: tcp
+2025/02/03 16:22:37 log.go:23: Protocol version: auto
+2025/02/03 16:22:37 log.go:23: Network: tcp
+2025/02/03 16:25:07 log.go:23: Protocol version: auto
+2025/02/03 16:25:07 log.go:23: Network: tcp
+2025/02/03 16:27:37 log.go:23: Protocol version: auto
+2025/02/03 16:27:37 log.go:23: Network: tcp
+2025/02/03 16:30:07 log.go:23: Protocol version: auto
+2025/02/03 16:30:07 log.go:23: Network: tcp
+2025/02/03 16:32:37 log.go:23: Protocol version: auto
+2025/02/03 16:32:37 log.go:23: Network: tcp
+2025/02/03 16:35:07 log.go:23: Protocol version: auto
+2025/02/03 16:35:07 log.go:23: Network: tcp
+2025/02/03 16:37:37 log.go:23: Protocol version: auto
+2025/02/03 16:37:37 log.go:23: Network: tcp
+2025/02/03 16:40:07 log.go:23: Protocol version: auto
+2025/02/03 16:40:07 log.go:23: Network: tcp
+2025/02/03 16:42:37 log.go:23: Protocol version: auto
+2025/02/03 16:42:37 log.go:23: Network: tcp
+2025/02/03 16:45:07 log.go:23: Protocol version: auto
+2025/02/03 16:45:07 log.go:23: Network: tcp
+2025/02/03 16:47:37 log.go:23: Protocol version: auto
+2025/02/03 16:47:37 log.go:23: Network: tcp
+2025/02/03 16:50:07 log.go:23: Protocol version: auto
+2025/02/03 16:50:07 log.go:23: Network: tcp
+2025/02/03 16:52:37 log.go:23: Protocol version: auto
+2025/02/03 16:52:37 log.go:23: Network: tcp
+2025/02/03 16:55:07 log.go:23: Protocol version: auto
+2025/02/03 16:55:07 log.go:23: Network: tcp
+2025/02/03 16:57:37 log.go:23: Protocol version: auto
+2025/02/03 16:57:37 log.go:23: Network: tcp
+2025/02/03 17:00:07 log.go:23: Protocol version: auto
+2025/02/03 17:00:07 log.go:23: Network: tcp
+2025/02/03 17:02:37 log.go:23: Protocol version: auto
+2025/02/03 17:02:37 log.go:23: Network: tcp
+2025/02/03 17:05:07 log.go:23: Protocol version: auto
+2025/02/03 17:05:07 log.go:23: Network: tcp
+2025/02/03 17:07:37 log.go:23: Protocol version: auto
+2025/02/03 17:07:37 log.go:23: Network: tcp
+2025/02/03 17:10:07 log.go:23: Protocol version: auto
+2025/02/03 17:10:07 log.go:23: Network: tcp
+2025/02/03 17:12:37 log.go:23: Protocol version: auto
+2025/02/03 17:12:37 log.go:23: Network: tcp
+2025/02/03 17:15:07 log.go:23: Protocol version: auto
+2025/02/03 17:15:07 log.go:23: Network: tcp
+2025/02/03 17:17:37 log.go:23: Protocol version: auto
+2025/02/03 17:17:37 log.go:23: Network: tcp
+2025/02/03 17:20:07 log.go:23: Protocol version: auto
+2025/02/03 17:20:07 log.go:23: Network: tcp
+2025/02/03 17:22:37 log.go:23: Protocol version: auto
+2025/02/03 17:22:37 log.go:23: Network: tcp
+2025/02/03 17:25:07 log.go:23: Protocol version: auto
+2025/02/03 17:25:07 log.go:23: Network: tcp
+2025/02/03 17:27:37 log.go:23: Protocol version: auto
+2025/02/03 17:27:37 log.go:23: Network: tcp
+2025/02/03 17:30:07 log.go:23: Protocol version: auto
+2025/02/03 17:30:07 log.go:23: Network: tcp
+2025/02/03 17:32:37 log.go:23: Protocol version: auto
+2025/02/03 17:32:37 log.go:23: Network: tcp
+2025/02/03 17:35:07 log.go:23: Protocol version: auto
+2025/02/03 17:35:07 log.go:23: Network: tcp
+2025/02/03 17:37:37 log.go:23: Protocol version: auto
+2025/02/03 17:37:37 log.go:23: Network: tcp
+2025/02/03 17:40:07 log.go:23: Protocol version: auto
+2025/02/03 17:40:07 log.go:23: Network: tcp
+2025/02/03 17:42:37 log.go:23: Protocol version: auto
+2025/02/03 17:42:37 log.go:23: Network: tcp
+2025/02/03 17:45:07 log.go:23: Protocol version: auto
+2025/02/03 17:45:07 log.go:23: Network: tcp
+2025/02/03 17:47:37 log.go:23: Protocol version: auto
+2025/02/03 17:47:37 log.go:23: Network: tcp
+2025/02/03 17:50:07 log.go:23: Protocol version: auto
+2025/02/03 17:50:07 log.go:23: Network: tcp
+2025/02/03 17:52:37 log.go:23: Protocol version: auto
+2025/02/03 17:52:37 log.go:23: Network: tcp
+2025/02/03 17:55:07 log.go:23: Protocol version: auto
+2025/02/03 17:55:07 log.go:23: Network: tcp
+2025/02/03 17:57:37 log.go:23: Protocol version: auto
+2025/02/03 17:57:37 log.go:23: Network: tcp
+2025/02/03 18:00:07 log.go:23: Protocol version: auto
+2025/02/03 18:00:07 log.go:23: Network: tcp
+2025/02/03 18:02:37 log.go:23: Protocol version: auto
+2025/02/03 18:02:37 log.go:23: Network: tcp
+2025/02/03 18:05:07 log.go:23: Protocol version: auto
+2025/02/03 18:05:07 log.go:23: Network: tcp
+2025/02/03 18:07:37 log.go:23: Protocol version: auto
+2025/02/03 18:07:37 log.go:23: Network: tcp
+2025/02/03 18:10:07 log.go:23: Protocol version: auto
+2025/02/03 18:10:07 log.go:23: Network: tcp
+2025/02/03 18:12:37 log.go:23: Protocol version: auto
+2025/02/03 18:12:37 log.go:23: Network: tcp
+2025/02/03 18:15:07 log.go:23: Protocol version: auto
+2025/02/03 18:15:07 log.go:23: Network: tcp
+2025/02/03 18:17:37 log.go:23: Protocol version: auto
+2025/02/03 18:17:37 log.go:23: Network: tcp
+2025/02/03 18:20:07 log.go:23: Protocol version: auto
+2025/02/03 18:20:07 log.go:23: Network: tcp
+2025/02/03 18:22:37 log.go:23: Protocol version: auto
+2025/02/03 18:22:37 log.go:23: Network: tcp
+2025/02/03 18:25:07 log.go:23: Protocol version: auto
+2025/02/03 18:25:07 log.go:23: Network: tcp
+2025/02/03 18:27:37 log.go:23: Protocol version: auto
+2025/02/03 18:27:37 log.go:23: Network: tcp
+2025/02/03 18:30:07 log.go:23: Protocol version: auto
+2025/02/03 18:30:07 log.go:23: Network: tcp
+2025/02/03 18:32:37 log.go:23: Protocol version: auto
+2025/02/03 18:32:37 log.go:23: Network: tcp
+2025/02/03 18:35:07 log.go:23: Protocol version: auto
+2025/02/03 18:35:07 log.go:23: Network: tcp
+2025/02/03 18:37:37 log.go:23: Protocol version: auto
+2025/02/03 18:37:37 log.go:23: Network: tcp
+2025/02/03 18:40:07 log.go:23: Protocol version: auto
+2025/02/03 18:40:07 log.go:23: Network: tcp
+2025/02/03 18:42:37 log.go:23: Protocol version: auto
+2025/02/03 18:42:37 log.go:23: Network: tcp
+2025/02/03 20:55:58 log.go:23: Protocol version: auto
+2025/02/03 20:55:58 log.go:23: Network: tcp
+2025/02/03 20:58:29 log.go:23: Protocol version: auto
+2025/02/03 20:58:29 log.go:23: Network: tcp
+2025/02/03 21:00:59 log.go:23: Protocol version: auto
+2025/02/03 21:00:59 log.go:23: Network: tcp
+2025/02/03 21:03:29 log.go:23: Protocol version: auto
+2025/02/03 21:03:29 log.go:23: Network: tcp
+2025/02/03 21:05:59 log.go:23: Protocol version: auto
+2025/02/03 21:05:59 log.go:23: Network: tcp
+2025/02/03 21:08:29 log.go:23: Protocol version: auto
+2025/02/03 21:08:29 log.go:23: Network: tcp
+2025/02/03 21:10:59 log.go:23: Protocol version: auto
+2025/02/03 21:10:59 log.go:23: Network: tcp
+2025/02/03 21:13:29 log.go:23: Protocol version: auto
+2025/02/03 21:13:29 log.go:23: Network: tcp
+2025/02/03 21:15:59 log.go:23: Protocol version: auto
+2025/02/03 21:15:59 log.go:23: Network: tcp
+2025/02/03 21:18:29 log.go:23: Protocol version: auto
+2025/02/03 21:18:29 log.go:23: Network: tcp
+2025/02/03 21:20:59 log.go:23: Protocol version: auto
+2025/02/03 21:20:59 log.go:23: Network: tcp
+2025/02/03 21:23:29 log.go:23: Protocol version: auto
+2025/02/03 21:23:29 log.go:23: Network: tcp
+2025/02/03 21:25:59 log.go:23: Protocol version: auto
+2025/02/03 21:25:59 log.go:23: Network: tcp
+2025/02/03 21:28:29 log.go:23: Protocol version: auto
+2025/02/03 21:28:29 log.go:23: Network: tcp
+2025/02/03 21:30:59 log.go:23: Protocol version: auto
+2025/02/03 21:30:59 log.go:23: Network: tcp
+2025/02/03 21:33:29 log.go:23: Protocol version: auto
+2025/02/03 21:33:29 log.go:23: Network: tcp
+2025/02/03 21:35:59 log.go:23: Protocol version: auto
+2025/02/03 21:35:59 log.go:23: Network: tcp
+2025/02/03 21:38:29 log.go:23: Protocol version: auto
+2025/02/03 21:38:29 log.go:23: Network: tcp
+2025/02/03 21:40:59 log.go:23: Protocol version: auto
+2025/02/03 21:40:59 log.go:23: Network: tcp
+2025/02/03 21:43:29 log.go:23: Protocol version: auto
+2025/02/03 21:43:29 log.go:23: Network: tcp
+2025/02/03 21:45:59 log.go:23: Protocol version: auto
+2025/02/03 21:45:59 log.go:23: Network: tcp
+2025/02/03 21:48:29 log.go:23: Protocol version: auto
+2025/02/03 21:48:29 log.go:23: Network: tcp
+2025/02/03 21:50:59 log.go:23: Protocol version: auto
+2025/02/03 21:50:59 log.go:23: Network: tcp
+2025/02/03 21:53:29 log.go:23: Protocol version: auto
+2025/02/03 21:53:29 log.go:23: Network: tcp
+2025/02/03 21:55:59 log.go:23: Protocol version: auto
+2025/02/03 21:55:59 log.go:23: Network: tcp
+2025/02/03 21:58:29 log.go:23: Protocol version: auto
+2025/02/03 21:58:29 log.go:23: Network: tcp
+2025/02/03 22:00:59 log.go:23: Protocol version: auto
+2025/02/03 22:00:59 log.go:23: Network: tcp
+2025/02/03 22:03:29 log.go:23: Protocol version: auto
+2025/02/03 22:03:29 log.go:23: Network: tcp
+2025/02/03 22:05:59 log.go:23: Protocol version: auto
+2025/02/03 22:05:59 log.go:23: Network: tcp
+2025/02/03 22:08:29 log.go:23: Protocol version: auto
+2025/02/03 22:08:29 log.go:23: Network: tcp
+2025/02/03 22:10:59 log.go:23: Protocol version: auto
+2025/02/03 22:10:59 log.go:23: Network: tcp
+2025/02/03 22:13:29 log.go:23: Protocol version: auto
+2025/02/03 22:13:29 log.go:23: Network: tcp
+2025/02/03 22:15:59 log.go:23: Protocol version: auto
+2025/02/03 22:15:59 log.go:23: Network: tcp
+2025/02/03 22:18:29 log.go:23: Protocol version: auto
+2025/02/03 22:18:29 log.go:23: Network: tcp
+2025/02/03 22:20:59 log.go:23: Protocol version: auto
+2025/02/03 22:20:59 log.go:23: Network: tcp
+2025/02/03 22:23:29 log.go:23: Protocol version: auto
+2025/02/03 22:23:29 log.go:23: Network: tcp
+2025/02/03 22:25:59 log.go:23: Protocol version: auto
+2025/02/03 22:25:59 log.go:23: Network: tcp
+2025/02/03 22:28:29 log.go:23: Protocol version: auto
+2025/02/03 22:28:29 log.go:23: Network: tcp
+2025/02/03 22:30:59 log.go:23: Protocol version: auto
+2025/02/03 22:30:59 log.go:23: Network: tcp
+2025/02/03 22:33:29 log.go:23: Protocol version: auto
+2025/02/03 22:33:29 log.go:23: Network: tcp
+2025/02/03 22:35:59 log.go:23: Protocol version: auto
+2025/02/03 22:35:59 log.go:23: Network: tcp
+2025/02/03 22:38:29 log.go:23: Protocol version: auto
+2025/02/03 22:38:29 log.go:23: Network: tcp
+2025/02/03 22:40:59 log.go:23: Protocol version: auto
+2025/02/03 22:40:59 log.go:23: Network: tcp
+2025/02/03 22:43:29 log.go:23: Protocol version: auto
+2025/02/03 22:43:29 log.go:23: Network: tcp
+2025/02/03 22:45:59 log.go:23: Protocol version: auto
+2025/02/03 22:45:59 log.go:23: Network: tcp
+2025/02/03 22:48:29 log.go:23: Protocol version: auto
+2025/02/03 22:48:29 log.go:23: Network: tcp
+2025/02/03 22:50:59 log.go:23: Protocol version: auto
+2025/02/03 22:50:59 log.go:23: Network: tcp
+2025/02/03 22:53:29 log.go:23: Protocol version: auto
+2025/02/03 22:53:29 log.go:23: Network: tcp
+2025/02/03 22:55:59 log.go:23: Protocol version: auto
+2025/02/03 22:55:59 log.go:23: Network: tcp
+2025/02/03 22:58:29 log.go:23: Protocol version: auto
+2025/02/03 22:58:29 log.go:23: Network: tcp
+2025/02/03 23:00:59 log.go:23: Protocol version: auto
+2025/02/03 23:00:59 log.go:23: Network: tcp
+2025/02/03 23:03:29 log.go:23: Protocol version: auto
+2025/02/03 23:03:29 log.go:23: Network: tcp
+2025/02/03 23:05:59 log.go:23: Protocol version: auto
+2025/02/03 23:05:59 log.go:23: Network: tcp
+2025/02/03 23:08:29 log.go:23: Protocol version: auto
+2025/02/03 23:08:29 log.go:23: Network: tcp
+2025/02/03 23:10:59 log.go:23: Protocol version: auto
+2025/02/03 23:10:59 log.go:23: Network: tcp
+2025/02/03 23:13:29 log.go:23: Protocol version: auto
+2025/02/03 23:13:29 log.go:23: Network: tcp
+2025/02/03 23:15:59 log.go:23: Protocol version: auto
+2025/02/03 23:15:59 log.go:23: Network: tcp
+2025/02/03 23:18:29 log.go:23: Protocol version: auto
+2025/02/03 23:18:29 log.go:23: Network: tcp
+2025/02/03 23:20:59 log.go:23: Protocol version: auto
+2025/02/03 23:20:59 log.go:23: Network: tcp
+2025/02/03 23:23:29 log.go:23: Protocol version: auto
+2025/02/03 23:23:29 log.go:23: Network: tcp
+2025/02/03 23:25:59 log.go:23: Protocol version: auto
+2025/02/03 23:25:59 log.go:23: Network: tcp
+2025/02/03 23:28:29 log.go:23: Protocol version: auto
+2025/02/03 23:28:29 log.go:23: Network: tcp
+2025/02/03 23:30:59 log.go:23: Protocol version: auto
+2025/02/03 23:30:59 log.go:23: Network: tcp
+2025/02/03 23:33:29 log.go:23: Protocol version: auto
+2025/02/03 23:33:29 log.go:23: Network: tcp
+2025/02/03 23:35:59 log.go:23: Protocol version: auto
+2025/02/03 23:35:59 log.go:23: Network: tcp
+2025/02/03 23:38:29 log.go:23: Protocol version: auto
+2025/02/03 23:38:29 log.go:23: Network: tcp
+2025/02/03 23:40:59 log.go:23: Protocol version: auto
+2025/02/03 23:40:59 log.go:23: Network: tcp
+2025/02/03 23:43:29 log.go:23: Protocol version: auto
+2025/02/03 23:43:29 log.go:23: Network: tcp
+2025/02/03 23:45:59 log.go:23: Protocol version: auto
+2025/02/03 23:45:59 log.go:23: Network: tcp
+2025/02/03 23:48:29 log.go:23: Protocol version: auto
+2025/02/03 23:48:29 log.go:23: Network: tcp
+2025/02/03 23:50:59 log.go:23: Protocol version: auto
+2025/02/03 23:50:59 log.go:23: Network: tcp
+2025/02/03 23:53:29 log.go:23: Protocol version: auto
+2025/02/03 23:53:29 log.go:23: Network: tcp
+2025/02/03 23:55:59 log.go:23: Protocol version: auto
+2025/02/03 23:55:59 log.go:23: Network: tcp
+2025/02/03 23:58:29 log.go:23: Protocol version: auto
+2025/02/03 23:58:29 log.go:23: Network: tcp
+2025/02/04 00:00:59 log.go:23: Protocol version: auto
+2025/02/04 00:00:59 log.go:23: Network: tcp
+2025/02/04 00:03:29 log.go:23: Protocol version: auto
+2025/02/04 00:03:29 log.go:23: Network: tcp
+2025/02/04 00:05:59 log.go:23: Protocol version: auto
+2025/02/04 00:05:59 log.go:23: Network: tcp
+2025/02/04 00:08:29 log.go:23: Protocol version: auto
+2025/02/04 00:08:29 log.go:23: Network: tcp
+2025/02/04 00:10:59 log.go:23: Protocol version: auto
+2025/02/04 00:10:59 log.go:23: Network: tcp
+2025/02/04 00:13:29 log.go:23: Protocol version: auto
+2025/02/04 00:13:29 log.go:23: Network: tcp
+2025/02/04 00:26:14 log.go:23: Protocol version: auto
+2025/02/04 00:26:14 log.go:23: Network: tcp
+2025/02/04 14:08:33 log.go:23: Protocol version: auto
+2025/02/04 14:08:33 log.go:23: Network: tcp
+2025/02/04 14:11:04 log.go:23: Protocol version: auto
+2025/02/04 14:11:04 log.go:23: Network: tcp
+2025/02/04 14:13:34 log.go:23: Protocol version: auto
+2025/02/04 14:13:34 log.go:23: Network: tcp
+2025/02/04 14:16:04 log.go:23: Protocol version: auto
+2025/02/04 14:16:04 log.go:23: Network: tcp
+2025/02/04 14:18:34 log.go:23: Protocol version: auto
+2025/02/04 14:18:34 log.go:23: Network: tcp
+2025/02/04 14:21:04 log.go:23: Protocol version: auto
+2025/02/04 14:21:04 log.go:23: Network: tcp
+2025/02/04 14:23:34 log.go:23: Protocol version: auto
+2025/02/04 14:23:34 log.go:23: Network: tcp
+2025/02/04 14:26:04 log.go:23: Protocol version: auto
+2025/02/04 14:26:04 log.go:23: Network: tcp
+2025/02/04 14:28:34 log.go:23: Protocol version: auto
+2025/02/04 14:28:34 log.go:23: Network: tcp
+2025/02/04 14:31:04 log.go:23: Protocol version: auto
+2025/02/04 14:31:04 log.go:23: Network: tcp
+2025/02/04 14:33:34 log.go:23: Protocol version: auto
+2025/02/04 14:33:34 log.go:23: Network: tcp
+2025/02/04 14:36:04 log.go:23: Protocol version: auto
+2025/02/04 14:36:04 log.go:23: Network: tcp
+2025/02/04 14:38:34 log.go:23: Protocol version: auto
+2025/02/04 14:38:34 log.go:23: Network: tcp
+2025/02/04 14:41:04 log.go:23: Protocol version: auto
+2025/02/04 14:41:04 log.go:23: Network: tcp
+2025/02/04 14:43:34 log.go:23: Protocol version: auto
+2025/02/04 14:43:34 log.go:23: Network: tcp
+2025/02/04 14:46:04 log.go:23: Protocol version: auto
+2025/02/04 14:46:04 log.go:23: Network: tcp
+2025/02/04 14:48:34 log.go:23: Protocol version: auto
+2025/02/04 14:48:34 log.go:23: Network: tcp
+2025/02/04 14:51:04 log.go:23: Protocol version: auto
+2025/02/04 14:51:04 log.go:23: Network: tcp
+2025/02/04 14:53:34 log.go:23: Protocol version: auto
+2025/02/04 14:53:34 log.go:23: Network: tcp
+2025/02/04 14:56:04 log.go:23: Protocol version: auto
+2025/02/04 14:56:04 log.go:23: Network: tcp
+2025/02/04 14:58:34 log.go:23: Protocol version: auto
+2025/02/04 14:58:34 log.go:23: Network: tcp
+2025/02/04 15:01:04 log.go:23: Protocol version: auto
+2025/02/04 15:01:04 log.go:23: Network: tcp
+2025/02/04 15:03:34 log.go:23: Protocol version: auto
+2025/02/04 15:03:34 log.go:23: Network: tcp
+2025/02/04 15:06:04 log.go:23: Protocol version: auto
+2025/02/04 15:06:04 log.go:23: Network: tcp
+2025/02/04 15:08:34 log.go:23: Protocol version: auto
+2025/02/04 15:08:34 log.go:23: Network: tcp
+2025/02/04 15:11:04 log.go:23: Protocol version: auto
+2025/02/04 15:11:04 log.go:23: Network: tcp
+2025/02/04 15:13:09 log.go:23: Protocol version: auto
+2025/02/04 15:13:09 log.go:23: Network: tcp
+2025/02/04 15:15:39 log.go:23: Protocol version: auto
+2025/02/04 15:15:39 log.go:23: Network: tcp
+2025/02/04 15:18:09 log.go:23: Protocol version: auto
+2025/02/04 15:18:09 log.go:23: Network: tcp
+2025/02/04 15:20:39 log.go:23: Protocol version: auto
+2025/02/04 15:20:39 log.go:23: Network: tcp
+2025/02/04 15:23:09 log.go:23: Protocol version: auto
+2025/02/04 15:23:09 log.go:23: Network: tcp
+2025/02/04 15:25:39 log.go:23: Protocol version: auto
+2025/02/04 15:25:39 log.go:23: Network: tcp
+2025/02/04 15:28:09 log.go:23: Protocol version: auto
+2025/02/04 15:28:09 log.go:23: Network: tcp
+2025/02/04 15:30:39 log.go:23: Protocol version: auto
+2025/02/04 15:30:39 log.go:23: Network: tcp
+2025/02/04 15:33:09 log.go:23: Protocol version: auto
+2025/02/04 15:33:09 log.go:23: Network: tcp
+2025/02/04 16:22:41 log.go:23: Protocol version: auto
+2025/02/04 16:22:41 log.go:23: Network: tcp
