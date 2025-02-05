@@ -14,6 +14,7 @@ return {
     "williamboman/mason-lspconfig.nvim", -- Mason integration for lspconfig
     "jose-elias-alvarez/null-ls.nvim", -- Formatter and Linter
     "zeioth/garbage-day.nvim",  -- Garbage Day plugin
+    "jose-elias-alvarez/nvim-lsp-ts-utils"
   },
   config = function()
     local lspconfig = require("lspconfig")
@@ -25,6 +26,7 @@ return {
     local mason_lspconfig = require("mason-lspconfig")
     local null_ls = require("null-ls")
     local garbage_day = require("garbage-day")
+    local ts_utils = require("nvim-lsp-ts-utils")
 
     local on_attach = function(client, bufnr)
       -- Enable formatting on save if supported by the server
@@ -47,7 +49,22 @@ return {
       vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
       vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, opts)
       vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
+      -- no default maps, so you may want to define some here
+      -- vim.keymap.set("n", "gs", vim.lsp.buf.organize_imports, opts)
+      -- vim.keymap.set("n", "gr", ":TSLspRenameFile<CR>", opts)
+      -- vim.keymap.set("n", "gi", ":TSLspImportAll<CR>", opts)
     end
+
+    -- Organize imports in JS files
+    local function js_organize_imports()
+      local params = {
+        command = "_typescript.organizeImports",
+        arguments = {vim.api.nvim_buf_get_name(0)},
+        title = ""
+      }
+      vim.lsp.buf.execute_command(params)
+    end
+
 
     -- Setup Mason
     mason.setup()
@@ -153,20 +170,127 @@ return {
       init_options = { html = { options = { ["bem.enabled"] = true } } },
     })
 
-    -- TypeScript/JavaScript (tsserver)
-    lspconfig.ts_ls.setup({
+    lspconfig.volar.setup({ 
       capabilities = capabilities,
-      on_attach = on_attach,
+      init_options = {
+        vue = {
+          hybridMode = false,
+        },
+      },
       settings = {
-        javascript = {
+        typescript = {
           inlayHints = {
-            includeInlayParameterNameHints = "all",
-            includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-            includeInlayFunctionParameterTypeHints = true,
-            includeInlayVariableTypeHints = true,
+            enumMemberValues = {
+              enabled = true,
+            },
+            functionLikeReturnTypes = {
+              enabled = true,
+            },
+            propertyDeclarationTypes = {
+              enabled = true,
+            },
+            parameterTypes = {
+              enabled = true,
+              suppressWhenArgumentMatchesName = true,
+            },
+            variableTypes = {
+              enabled = true,
+            },
           },
         },
       },
+    })
+
+    -- TypeScript/JavaScript (tsserver)
+    lspconfig.ts_ls.setup({
+        capabilities = capabilities,
+        filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+
+        init_options = vim.tbl_deep_extend("force", require("nvim-lsp-ts-utils").init_options, {
+            plugins = {
+                {
+                    name = "@vue/typescript-plugin",
+                    location = vim.fn.stdpath("data") .. "/mason/packages/vue-language-server/node_modules/@vue/language-server",
+                    languages = { "vue" },
+                },
+            },
+        }),
+
+        settings = {
+            javascript = {
+                inlayHints = {
+                    includeInlayParameterNameHints = "all",
+                    includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+                    includeInlayFunctionParameterTypeHints = true,
+                    includeInlayVariableTypeHints = true,
+                    includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+                    includeInlayPropertyDeclarationTypeHints = true,
+                    includeInlayFunctionLikeReturnTypeHints = true,
+                    includeInlayEnumMemberValueHints = true,
+                },
+            },
+            typescript = {
+                inlayHints = {
+                    includeInlayParameterNameHints = "all",
+                    includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+                    includeInlayFunctionParameterTypeHints = true,
+                    includeInlayVariableTypeHints = true,
+                    includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+                    includeInlayPropertyDeclarationTypeHints = true,
+                    includeInlayFunctionLikeReturnTypeHints = true,
+                    includeInlayEnumMemberValueHints = true,
+                },
+            },
+        },
+
+        on_attach = function(client, bufnr)
+            ts_utils.setup({
+                debug = false,
+                disable_commands = false,
+                enable_import_on_completion = false,
+
+                -- import all
+                import_all_timeout = 5000,
+                import_all_priorities = {
+                    same_file = 1,
+                    local_files = 2,
+                    buffer_content = 3,
+                    buffers = 4,
+                },
+                import_all_scan_buffers = 100,
+                import_all_select_source = false,
+                always_organize_imports = true,
+
+                -- filter diagnostics
+                filter_out_diagnostics_by_severity = {},
+                filter_out_diagnostics_by_code = {},
+
+                -- inlay hints
+                auto_inlay_hints = true,
+                inlay_hints_highlight = "Comment",
+                inlay_hints_priority = 200,
+                inlay_hints_throttle = 150,
+                inlay_hints_format = {
+                    Type = {},
+                    Parameter = {},
+                    Enum = {},
+                },
+
+                -- update imports on file move
+                update_imports_on_move = false,
+                require_confirmation_on_move = false,
+                watch_dir = nil,
+            })
+
+            -- required to fix code action ranges and filter diagnostics
+            ts_utils.setup_client(client)
+
+            -- key mappings
+            local opts = { silent = true }
+            vim.api.nvim_buf_set_keymap(bufnr, "n", "gs", ":TSLspOrganize<CR>", opts)
+            vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", ":TSLspRenameFile<CR>", opts)
+            vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", ":TSLspImportAll<CR>", opts)
+        end,
     })
 
     lspconfig.eslint.setup({
