@@ -42,6 +42,16 @@ return {
       -- Optional: Add keybindings for LSP functionality
       local opts = { noremap = true, silent = true, buffer = bufnr }
       vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+      vim.keymap.set("n", "gvd", function()
+          vim.cmd("vsplit")  -- Open a new vertical split
+          vim.lsp.buf.definition()  -- Go to definition
+      end, opts)
+      vim.keymap.set("n", "ghd", function()
+          vim.cmd("split")  -- Open a new vertical split
+          vim.lsp.buf.definition()  -- Go to definition
+      end, opts)
+      vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+      vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
       vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
       vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
       vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
@@ -49,10 +59,6 @@ return {
       vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
       vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, opts)
       vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
-      -- no default maps, so you may want to define some here
-      -- vim.keymap.set("n", "gs", vim.lsp.buf.organize_imports, opts)
-      -- vim.keymap.set("n", "gr", ":TSLspRenameFile<CR>", opts)
-      -- vim.keymap.set("n", "gi", ":TSLspImportAll<CR>", opts)
     end
 
     -- Organize imports in JS files
@@ -288,7 +294,7 @@ return {
             -- key mappings
             local opts = { silent = true }
             vim.api.nvim_buf_set_keymap(bufnr, "n", "gs", ":TSLspOrganize<CR>", opts)
-            vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", ":TSLspRenameFile<CR>", opts)
+            vim.api.nvim_buf_set_keymap(bufnr, "n", "frn", ":TSLspRenameFile<CR>", opts)
             vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", ":TSLspImportAll<CR>", opts)
         end,
     })
