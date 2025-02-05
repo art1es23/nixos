@@ -52,6 +52,7 @@
     atuin
     bat
     curl
+    dasel
     direnv
     eza
     eget
@@ -71,6 +72,7 @@
     sttr # Change text format
     wget
     xh
+    yq
     zoxide
 
     #CLI Development
@@ -78,11 +80,14 @@
     atac
     csvlens
     gama # Managing Github Actions
+    grex # Generate RexExp
     gitnr # .gitignore generator
     redis
     harlequin # SQL IDE
     heroku
+    hub # Github
     openssh
+    ots # Share e2e encrypted secrets via one-time URL
     k9s
     # kaskade # TUI Apache Kafka
     koji # git-commits generator
@@ -91,8 +96,12 @@
     lazydocker
     live-server
     nap # Code snippets manager
+    npm-check-updates
     rainfrog # Postgres IDE
     serie # GIT commit tree preview
+    semantic-release # Automated vers management and package publishing
+    sshs
+    surge-cli # Static web-publishing
     tailspin # Log-previewer
 
     # CLI Additional
@@ -104,6 +113,7 @@
     ddgr # DuckDuckGo
     hyperfine # Benchmark for tools/cmds
     gallery-dl # Image/s download
+    gtt # Translator
     gum
     fastfetch
     lychee # Async link checker
@@ -114,7 +124,9 @@
     pik
     terminaltexteffects
     typioca # Typing checker
+    speedtest-cli
     scc
+    streamlink # Extract streams
     wiki-tui
     wiper # Disk analyzer
     wtf

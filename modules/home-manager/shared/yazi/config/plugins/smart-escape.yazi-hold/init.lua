@@ -1,3 +1,4 @@
+--- @sync entry
 -- init.lua
 --
 -- Created: 05/20/24

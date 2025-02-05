@@ -106,3 +106,4 @@ require("zoxide"):setup {
 
 require("git"):setup()
 require("full-border"):setup()
+require("omp"):setup({ config = "~/.config/zsh/themes/tokyonight.omp.toml"})
