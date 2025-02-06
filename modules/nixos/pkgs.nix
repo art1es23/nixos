@@ -143,7 +143,7 @@
     libreoffice-qt
     gimp
     figma-linux
-    transmission
+    # transmission_4
 
     # Browsers
     firefox
