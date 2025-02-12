@@ -3,6 +3,7 @@
 {
   imports = [
     ./dunst
+    ./gomi
     ./rofi
     ./hyprland
     ./waybar
@@ -31,6 +32,7 @@
     hyprpolkitagent
     hyprutils
     wl-clipboard
+    bibata-cursors
 
     cliphist
 

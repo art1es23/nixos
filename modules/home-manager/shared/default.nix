@@ -3,6 +3,7 @@
 {
   imports = [
     ./bat
+    # ./gomi
     ./kitty
     ./nvim
     ./tmux

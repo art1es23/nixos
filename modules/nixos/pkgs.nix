@@ -60,6 +60,7 @@
     ffmpeg
     fzf
     glow # Markdown preview
+    gomi # Replacement for UNIX rm command
     jq
     jql
     jless
@@ -144,6 +145,8 @@
     gimp
     figma-linux
     # transmission_4
+    file-roller
+    unar
 
     # Browsers
     firefox
