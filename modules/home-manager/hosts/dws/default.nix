@@ -4,6 +4,7 @@
   imports = [
     ./dunst
     ./gomi
+    ./grimblast
     ./rofi
     ./hyprland
     ./waybar
@@ -35,6 +36,7 @@
     bibata-cursors
 
     cliphist
+    grimblast
 
     pavucontrol
     hyprpolkitagent
@@ -43,6 +45,7 @@
     libnotify
     xdg-desktop-portal-gtk
     xdg-desktop-portal-hyprland
+    xdg-utils  # Required for `xdg-open`
   ];
 
   # xdg.portal.extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];

@@ -35,12 +35,14 @@
         "XDG_SESSION_DESKTOP,Hyprland"
         "QT_QPA_PLATFORM,wayland"
         # "QT_SCALE_FACTOR,1"
-        "XDG_SCREENSHOTS_DIR,$HOME/screens"
+        "XDG_SCREENSHOTS_DIR,$HOME/Pictures/Screenshots"
+        "GRIMSHOT_DIR,$HOME/Pictures/Screenshots"
       ];
 
       "$terminal" = "kitty";
       "$fileManager" = "kitty yazi";
       "$menu" = "bash $HOME/.config/rofi/scripts/rofi-launcher";
+      "$screenshot" = "bash $HOME/.config/grimblast/scripts/screenshot.sh";
       "$mod" = "SUPER";
 
       "exec-once" = [

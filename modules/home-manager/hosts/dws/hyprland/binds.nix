@@ -76,6 +76,11 @@
       # Waybar switching
       "$mod, W, exec, pkill -SIGUSR1 waybar"
       # "..., exec, XDG_CURRENT_DESKTOP=Hyprland flameshot gui"
+
+      # Screenshots with Dunst notifications
+      "$mod, Print, exec, $screenshot"
+      "$mod SHIFT, Print, exec, grimblast --notify save area"
+      "$mod ALT, Print, exec, grimblast --notify save active"
     ];
 
     # Move/resize windows with mainMod + LMB/RMB and dragging

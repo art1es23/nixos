@@ -19,8 +19,8 @@ in
         {
           "github.com" = {
             hostname = "github.com";
-            user = "qmpwwsd";
-            identityFile = "${home}/.ssh/id_personal";
+            user = "art1es23";
+            identityFile = "${home}/.ssh/github_personal";
           };
           "bitbucket.org" = {
             hostname = "bitbucket.org";
@@ -32,8 +32,8 @@ in
         {
           "github.com-personal" = {
             hostname = "github.com";
-            user = "qmpwwsd";
-            identityFile = "${home}/.ssh/id_personal";
+            user = "art1es23";
+            identityFile = "${home}/.ssh/github_personal";
           };
           "bitbucket.org" = {
             hostname = "bitbucket.org";

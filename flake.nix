@@ -1,5 +1,5 @@
 {
-  description = "qmpwwsd nixos flake";
+  description = "qmpwwsd NixOS flake";
 
   inputs = {
     nixpkgs = {
@@ -7,7 +7,6 @@
     };
     nixpkgs-stable = {
       url = "github:nixos/nixpkgs/nixos-24.11";
-      # url = "github:nixos/nixpkgs/nixos-24.05";
     };
     nix-darwin = {
       url = "github:LnL7/nix-darwin";

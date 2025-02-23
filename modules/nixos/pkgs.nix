@@ -6,7 +6,12 @@
 }:
 
 {
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    permittedInsecurePackages = [
+      "electron-27.3.11"
+    ];
+  };
 
   environment.systemPackages = with pkgs; [
     # System
@@ -45,6 +50,7 @@
     oh-my-posh
     neovim
     meld
+    posting
     tmux
 
     # CLI Tools
@@ -95,6 +101,7 @@
     ktop
     lazygit
     lazydocker
+    lazysql
     live-server
     nap # Code snippets manager
     npm-check-updates
@@ -157,6 +164,7 @@
 
     #Productivity
     obsidian
+    logseq
     # notion
 
     # Social
@@ -190,6 +198,8 @@
     variables = {
       SSH_ASKPASS = lib.mkForce "$HOME/.config/rofi/scripts/rofi-askpass";
       SUDO_ASKPASS = lib.mkForce "$HOME/.config/rofi/scripts/rofi-askpass";
+      # Set the custom screenshot directory for grimblast
+      XDG_SCREENSHOTS_DIR="$HOME/Pictures/Screenshots";
     };
     sessionVariables = {
       WLR_NO_HARDWARE_CURSORS = "1";
