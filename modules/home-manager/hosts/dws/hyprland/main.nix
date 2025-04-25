@@ -43,7 +43,7 @@
       "$fileManager" = "kitty yazi";
       "$menu" = "bash $HOME/.config/rofi/scripts/rofi-launcher";
       "$screenshot" = "bash $HOME/.config/grimblast/scripts/screenshot.sh";
-      "wallpaper" = "bash $/.config/rofi/scripts/rofi-wallpaper"
+      "wallpaper" = "bash $/.config/rofi/scripts/rofi-wallpaper";
       "$mod" = "SUPER";
 
       "exec-once" = [

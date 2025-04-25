@@ -83,7 +83,7 @@
       "$mod ALT, Print, exec, grimblast --notify save active"
 
       # Change wallpaper
-      "$mod, W, exec, $wallpaper"
+      "$mod SHIFT, W, exec, $wallpaper"
     ];
 
     # Move/resize windows with mainMod + LMB/RMB and dragging
