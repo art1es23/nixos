@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+WALLPAPER_DIR="$HOME/nixos/screenshot"
+
+# Start swww-daemon if not already running
+pgrep -x swww-daemon > /dev/null || (swww-daemon & sleep 0.5)
+
+# Prompt user with rofi to select wallpaper
+CHOICE=$(find "$WALLPAPER_DIR" -type f | rofi -dmenu -p "Choose wallpaper")
+
+# If an image was selected, apply it to all outputs
+if [ -n "$CHOICE" ]; then
+  for output in $(swww query | grep '^' | cut -d: -f1); do
+    swww img "$CHOICE" --outputs "$output" \
+      --transition-type any --transition-fps 60 --transition-duration 1
+  done
+fi

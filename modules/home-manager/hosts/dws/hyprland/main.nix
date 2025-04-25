@@ -43,11 +43,11 @@
       "$fileManager" = "kitty yazi";
       "$menu" = "bash $HOME/.config/rofi/scripts/rofi-launcher";
       "$screenshot" = "bash $HOME/.config/grimblast/scripts/screenshot.sh";
-      "wallpaper" = "bash $/.config/rofi/scripts/rofi-wallpaper";
+      "$wallpaper" = "bash $HOME/.config/rofi/scripts/rofi-wallpaper";
       "$mod" = "SUPER";
 
       "exec-once" = [
-        "waybar & swww"
+        "waybar & swww & swww-daemon"
         "nm-applet --indicator"
         "blueman-applet"
         "hypridle"

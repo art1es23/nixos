@@ -218,10 +218,10 @@ keymap = [
 	{ on = [
 		"g",
 		"g",
-	], run = "arrow -99999999", desc = "Go to top" },
+	], run = "arrow top", desc = "Go to top" },
 	{ on = [
 		"G",
-	], run = "arrow 99999999", desc = "Go to bottom" },
+	], run = "arrow bot", desc = "Go to bottom" },
 
 	# Selection
 	{ on = [

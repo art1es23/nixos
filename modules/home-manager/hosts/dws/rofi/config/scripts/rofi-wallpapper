@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-WALLPAPER_DIR="$HOME/nixos/screenshot"
-CHOICE=$(find "$WALLPAPER_DIR" -type f | rofi -dmenu -p "Choose wallpaper")
-
-if [ -n "$CHOICE" ]; then
-  swww img "$CHOICE" --transition-type any --transition-fps 60 --transition-duration 1
-fi

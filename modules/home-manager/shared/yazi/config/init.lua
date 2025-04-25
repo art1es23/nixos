@@ -32,20 +32,20 @@ end
 -- add symlink to status line for links
 
 -- get host name and set width depending on machine
-local function GetHostname()
-	local f = io.popen('/bin/hostname')
-	local hostname = f:read('*a') or ''
-	f:close()
-	return string.gsub(hostname, '\n$', '')
-end
-local Host = GetHostname()
-
-local linked_width = 0
-if Host == 'CB' then
-	linked_width = 55
-elseif Host == 'LM' then
-	linked_width = 65
-end
+-- local function GetHostname()
+-- 	local f = io.popen('/bin/hostname')
+-- 	local hostname = f:read('*a') or ''
+-- 	f:close()
+-- 	return string.gsub(hostname, '\n$', '')
+-- end
+-- local Host = GetHostname()
+--
+-- local linked_width = 0
+-- if Host == 'CB' then
+-- 	linked_width = 55
+-- elseif Host == 'LM' then
+-- 	linked_width = 65
+-- end
 
 -- add symlink to status line
 
