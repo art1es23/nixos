@@ -33,6 +33,7 @@
     xlsx2csv
     catdoc
     odt2txt
+    mpv
 
     xfce.xfce4-settings
     xfce.xfce4-power-manager
@@ -65,6 +66,7 @@
     eget
     fd
     ffmpeg
+    ffmpegthumbnailer
     fzf
     glow # Markdown preview
     gomi # Replacement for UNIX rm command

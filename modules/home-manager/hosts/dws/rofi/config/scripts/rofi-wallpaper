@@ -1,17 +1,57 @@
 #!/usr/bin/env bash
 
 WALLPAPER_DIR="$HOME/nixos/screenshot"
+ICON_DIR="$HOME/.local/share/icons/rofi-wallpapers"
 
-# Start swww-daemon if not already running
-pgrep -x swww-daemon > /dev/null || (swww-daemon & sleep 0.5)
+# Create icon directory if it doesn't exist
+mkdir -p "$ICON_DIR"
 
-# Prompt user with rofi to select wallpaper
-CHOICE=$(find "$WALLPAPER_DIR" -type f | rofi -dmenu -p "Choose wallpaper")
+# Define arrays for image, gif, and video types
+IMAGE_TYPES=("png" "jpg" "jpeg")
+GIF_TYPES=("gif")
 
-# If an image was selected, apply it to all outputs
+# Create previews for image, gif, and video files
+find "$WALLPAPER_DIR" -type f | while read -r img; do
+  # Extract the file extension
+  EXT="${img##*.}"
+
+  # Handle images (png, jpg, jpeg)
+  if [[ " ${IMAGE_TYPES[@]} " =~ " ${EXT} " ]]; then
+    # Create a symlink to the image in the preview folder
+    ln -sf "$img" "$ICON_DIR/$(basename "$img")"
+  
+  # Handle GIFs
+  elif [[ " ${GIF_TYPES[@]} " =~ " ${EXT} " ]]; then
+    # Create a preview image for the GIF (first frame)
+    thumbnail_path="$ICON_DIR/$(basename "$img").thumbnail.png"
+    ffmpegthumbnailer -i "$img" -o "$thumbnail_path" -s 0
+    # Create symlink to the original GIF file, not the thumbnail
+    ln -sf "$img" "$ICON_DIR/$(basename "$img")"
+  
+done
+
+# Ensure swww-daemon is running
+pgrep -x swww-daemon >/dev/null || (swww-daemon & sleep 0.5)
+
+# Use Rofi to select wallpaper with previews in a grid layout
+CHOICE=$(find "$ICON_DIR" -type f | rofi -dmenu -show-icons -theme-str \
+  'listview { columns: 5; lines: 5; }' -p "Choose wallpaper" -i)
+
+# Apply selected wallpaper using swww to all outputs
 if [ -n "$CHOICE" ]; then
-  for output in $(swww query | grep '^' | cut -d: -f1); do
-    swww img "$CHOICE" --outputs "$output" \
-      --transition-type any --transition-fps 60 --transition-duration 1
-  done
+  # Remove the .thumbnail.png suffix from the file path
+  SELECTED="${CHOICE%.thumbnail.png}"
+
+  # Check if the original file exists before applying
+  if [ -f "$SELECTED" ]; then
+    EXT="${SELECTED##*.}"
+
+    for output in $(swww query | cut -d: -f1); do
+      # Ensure we apply the correct file and not the thumbnail version
+      swww img "$SELECTED" --outputs "$output" \
+        --transition-type any --transition-fps 60 --transition-duration 1
+    done
+  else
+    echo "Original file $SELECTED not found."
+  fi
 fi
