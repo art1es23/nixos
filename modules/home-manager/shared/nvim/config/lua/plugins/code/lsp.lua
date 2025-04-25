@@ -12,9 +12,10 @@ return {
     "windwp/nvim-autopairs",    -- Autopairs
     "williamboman/mason.nvim",  -- LSP installer
     "williamboman/mason-lspconfig.nvim", -- Mason integration for lspconfig
-    "jose-elias-alvarez/null-ls.nvim", -- Formatter and Linter
+    "nvimtools/none-ls.nvim", -- Formatter and Linter
     "zeioth/garbage-day.nvim",  -- Garbage Day plugin
-    "jose-elias-alvarez/nvim-lsp-ts-utils"
+    "jose-elias-alvarez/nvim-lsp-ts-utils",
+    'nvimdev/lspsaga.nvim'
   },
   config = function()
     local lspconfig = require("lspconfig")
@@ -27,6 +28,7 @@ return {
     local null_ls = require("null-ls")
     local garbage_day = require("garbage-day")
     local ts_utils = require("nvim-lsp-ts-utils")
+    local lsp_saga = require("lspsaga")
 
     local on_attach = function(client, bufnr)
       -- Enable formatting on save if supported by the server
@@ -38,6 +40,18 @@ return {
           end,
         })
       end
+
+      vim.defer_fn(function()
+        vim.diagnostic.open_float(nil, { focusable = false, scope = "line" })
+      end, 100)
+
+      -- Keep showing on CursorHold too
+      vim.api.nvim_create_autocmd("CursorHold", {
+        buffer = bufnr,
+        callback = function()
+          vim.diagnostic.open_float(nil, { focusable = false, scope = "line" })
+        end,
+      })
 
       -- Optional: Add keybindings for LSP functionality
       local opts = { noremap = true, silent = true, buffer = bufnr }
@@ -52,30 +66,33 @@ return {
       end, opts)
       vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
       vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-      vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
       vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-      vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-      vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
       vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, opts)
       vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
+      -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ia", ":TSLspImportAll<CR>", opts)
+
+      -- LSPSaga Keybindings
+      vim.keymap.set("n", "gh", "<cmd>Lspsaga lsp_finder<CR>", opts)
+      vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", opts)
+      vim.keymap.set("n", "<leader>ca", "<cmd>Lspsaga code_action<CR>", opts)
+      vim.keymap.set("n", "<leader>rn", "<cmd>Lspsaga rename<CR>", opts)
+      vim.keymap.set("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
+      vim.keymap.set("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
+
+      -- Unused default
+      -- vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+      -- vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+      -- vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+      -- vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
     end
 
-    -- Organize imports in JS files
-    local function js_organize_imports()
-      local params = {
-        command = "_typescript.organizeImports",
-        arguments = {vim.api.nvim_buf_get_name(0)},
-        title = ""
-      }
-      vim.lsp.buf.execute_command(params)
-    end
-
+    -- Setup LSP Saga
+    lsp_saga.setup({})
 
     -- Setup Mason
     mason.setup()
     mason_lspconfig.setup({
-      ensure_installed = { "rust_analyzer", "lua_ls", "gopls", "pyright", "html", "graphql", "emmet_ls", "eslint" },
+      ensure_installed = { "rust_analyzer", "lua_ls", "gopls", "pyright", "html", "graphql", "emmet_ls", "eslint", "tailwindcss" },
     })
 
     -- Load VSCode snippets
@@ -169,135 +186,176 @@ return {
     lspconfig.html.setup({ capabilities = capabilities })
 
     lspconfig.graphql.setup({ capabilities = capabilities })
+    lspconfig.tailwindcss.setup({ capabilities = capabilities })
 
     lspconfig.emmet_ls.setup({
       capabilities = capabilities,
       filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "vue" },
-      init_options = { html = { options = { ["bem.enabled"] = true } } },
+      init_options = { html = { options = { ["bem.enabled"] = true } } }
     })
 
-    lspconfig.volar.setup({ 
+    lspconfig.volar.setup({
       capabilities = capabilities,
       init_options = {
         vue = {
-          hybridMode = false,
-        },
+          hybridMode = false
+        }
       },
       settings = {
         typescript = {
           inlayHints = {
             enumMemberValues = {
-              enabled = true,
+              enabled = true
             },
             functionLikeReturnTypes = {
-              enabled = true,
+              enabled = true
             },
             propertyDeclarationTypes = {
-              enabled = true,
+              enabled = true
             },
             parameterTypes = {
               enabled = true,
-              suppressWhenArgumentMatchesName = true,
+              suppressWhenArgumentMatchesName = true
             },
             variableTypes = {
-              enabled = true,
-            },
-          },
-        },
-      },
+              enabled = true
+            }
+          }
+        }
+      }
     })
 
     -- TypeScript/JavaScript (tsserver)
     lspconfig.ts_ls.setup({
-        capabilities = capabilities,
-        filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+      capabilities = capabilities,
+      filetypes = { "typescript", "javascript", "typescriptreact", "javascriptreact", "vue" },
 
-        init_options = vim.tbl_deep_extend("force", require("nvim-lsp-ts-utils").init_options, {
-            plugins = {
-                {
-                    name = "@vue/typescript-plugin",
-                    location = vim.fn.stdpath("data") .. "/mason/packages/vue-language-server/node_modules/@vue/language-server",
-                    languages = { "vue" },
-                },
-            },
-        }),
+      root_dir = function(fname)
+        local root_pattern = require("lspconfig.util").root_pattern("nuxt.config.js", "nuxt.config.ts", "package.json")
+        return root_pattern(fname) or vim.fn.getcwd()  -- dynamic root for nested `nuxt.config.js` or `nuxt.config.ts`
+      end,
 
-        settings = {
-            javascript = {
-                inlayHints = {
-                    includeInlayParameterNameHints = "all",
-                    includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-                    includeInlayFunctionParameterTypeHints = true,
-                    includeInlayVariableTypeHints = true,
-                    includeInlayVariableTypeHintsWhenTypeMatchesName = true,
-                    includeInlayPropertyDeclarationTypeHints = true,
-                    includeInlayFunctionLikeReturnTypeHints = true,
-                    includeInlayEnumMemberValueHints = true,
-                },
+      settings = {
+        javascript = {
+            inlayHints = {
+                includeInlayParameterNameHints = "all",
+                includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+                includeInlayFunctionParameterTypeHints = true,
+                includeInlayVariableTypeHints = true,
+                includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+                includeInlayPropertyDeclarationTypeHints = true,
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayEnumMemberValueHints = true,
             },
-            typescript = {
-                inlayHints = {
-                    includeInlayParameterNameHints = "all",
-                    includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-                    includeInlayFunctionParameterTypeHints = true,
-                    includeInlayVariableTypeHints = true,
-                    includeInlayVariableTypeHintsWhenTypeMatchesName = true,
-                    includeInlayPropertyDeclarationTypeHints = true,
-                    includeInlayFunctionLikeReturnTypeHints = true,
-                    includeInlayEnumMemberValueHints = true,
-                },
+            suggest = {
+                completeFunctionCalls = true,
+                autoImports = true,
+            },
+            preferences = {
+                importModuleSpecifier = "relative",
             },
         },
+        typescript = {
+          tsdk = vim.fn.stdpath("data") .. "/mason/packages/typescript-language-server/node_modules/typescript/lib", -- Point to TS SDK
+          inlayHints = {
+              includeInlayParameterNameHints = "all",
+              includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayVariableTypeHints = true,
+              includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayEnumMemberValueHints = true,
+          },
+          suggest = {
+              completeFunctionCalls = true,
+              autoImports = true,
+          },
+          preferences = {
+              importModuleSpecifier = "relative",
+          },
+          -- Enable Vue 3 features in TypeScript
+          vueCompilerOptions = {
+            moduleResolution = "node", -- Use node resolution strategy for Vue
+          },
+        },
+        vue = {
+          enable = true,  -- Enable Vue in the LSP configuration
+          useWorkspaceDependencies = true,  -- Use workspace dependencies for Vue
+          -- Ensure that we have Vue types loaded
+        },
 
-        on_attach = function(client, bufnr)
-            ts_utils.setup({
-                debug = false,
-                disable_commands = false,
-                enable_import_on_completion = false,
+        -- Fix paths for aliases like `@`, `#components`, etc.
+        preferences = {
+          importModuleSpecifier = "relative",  -- Ensure that imports are relative
+          includeCompletionsForImportStatements = true,  -- Include imports in autocompletions
+        },
+      },
 
-                -- import all
-                import_all_timeout = 5000,
-                import_all_priorities = {
-                    same_file = 1,
-                    local_files = 2,
-                    buffer_content = 3,
-                    buffers = 4,
-                },
-                import_all_scan_buffers = 100,
-                import_all_select_source = false,
-                always_organize_imports = true,
+      init_options = {
+        preferences = {
+          importModuleSpecifier = "relative",  -- Use relative imports
+          includeCompletionsForImportStatements = true,  -- Include imports in completions
+        },
+      },
 
-                -- filter diagnostics
-                filter_out_diagnostics_by_severity = {},
-                filter_out_diagnostics_by_code = {},
+      on_attach = function(client, bufnr)
+        -- Add `node_modules` to path to help with module resolution
+        vim.opt_local.path:append("node_modules")
 
-                -- inlay hints
-                auto_inlay_hints = true,
-                inlay_hints_highlight = "Comment",
-                inlay_hints_priority = 200,
-                inlay_hints_throttle = 150,
-                inlay_hints_format = {
-                    Type = {},
-                    Parameter = {},
-                    Enum = {},
-                },
+        -- Ensure that `ts_utils` is set up for managing imports, organizing code, etc.
+        ts_utils.setup({
+            debug = false,
+            disable_commands = false,
+            enable_import_on_completion = true,
 
-                -- update imports on file move
-                update_imports_on_move = false,
-                require_confirmation_on_move = false,
-                watch_dir = nil,
-            })
+            -- import all
+            import_all_timeout = 5000,
+            import_all_priorities = {
+                same_file = 1,
+                local_files = 2,
+                buffer_content = 3,
+                buffers = 4,
+            },
+            import_all_scan_buffers = 100,
+            import_all_select_source = false,
+            always_organize_imports = true,
 
-            -- required to fix code action ranges and filter diagnostics
-            ts_utils.setup_client(client)
+            -- filter diagnostics
+            filter_out_diagnostics_by_severity = {},
+            filter_out_diagnostics_by_code = {},
 
-            -- key mappings
-            local opts = { silent = true }
-            vim.api.nvim_buf_set_keymap(bufnr, "n", "gs", ":TSLspOrganize<CR>", opts)
-            vim.api.nvim_buf_set_keymap(bufnr, "n", "frn", ":TSLspRenameFile<CR>", opts)
-            vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", ":TSLspImportAll<CR>", opts)
-        end,
+            -- inlay hints
+            auto_inlay_hints = true,
+            inlay_hints_highlight = "Comment",
+            inlay_hints_priority = 200,
+            inlay_hints_throttle = 150,
+            inlay_hints_format = {
+                Type = {},
+                Parameter = {},
+                Enum = {},
+            },
+
+            -- update imports on file move
+            update_imports_on_move = true,
+            require_confirmation_on_move = true,
+            watch_dir = nil,
+        })
+
+        -- required to fix code action ranges and filter diagnostics
+        ts_utils.setup_client(client)
+
+        -- key mappings
+        local opts = { silent = true }
+        vim.api.nvim_buf_set_keymap(bufnr, "n", "gs", ":TSLspOrganize<CR>", opts)
+        vim.api.nvim_buf_set_keymap(bufnr, "n", "frn", ":TSLspRenameFile<CR>", opts)
+        vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", ":TSLspImportAll<CR>", opts)
+
+        -- Call global `on_attach` function to get standard keybindings
+        on_attach(client, bufnr)
+      end,
     })
+
 
     lspconfig.eslint.setup({
       capabilities = capabilities,
@@ -317,11 +375,12 @@ return {
     -- Setup null-ls for Prettier and ESLint
     null_ls.setup({
       on_attach = on_attach, -- Attach auto-formatting logic
+      capabilities = capabilities,
       sources = {
         -- Prettier for formatting
-        null_ls.builtins.formatting.prettier.with({
-          filetypes = { "javascript", "typescript", "css", "scss", "html", "json", "yaml", "markdown", "vue", "svelte" },
-        }),
+        -- null_ls.builtins.formatting.prettier.with({
+        --   filetypes = { "javascript", "typescript", "css", "scss", "html", "json", "yaml", "markdown", "vue", "svelte" },
+        -- }),
         -- ESLint for diagnostics and formatting
         null_ls.builtins.diagnostics.eslint_d,
         null_ls.builtins.formatting.eslint_d,
@@ -331,7 +390,7 @@ return {
     -- Setup garbage-day
     garbage_day.setup({
       -- Automatically run garbage day for buffers
-      auto_clear = true, 
+      auto_clear = true,
     })
   end,
 }

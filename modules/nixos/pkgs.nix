@@ -21,6 +21,7 @@
     lua
     go
     nodejs
+    pnpm
     pciutils
     tcpdump
     lm_sensors

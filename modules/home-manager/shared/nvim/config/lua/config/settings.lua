@@ -94,3 +94,16 @@ o.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 o.scrolloff = 10
+
+o.updatetime = 250
+
+vim.diagnostic.config({
+  virtual_text = {
+    prefix = "",  -- or "", "▶", "»", "→"
+    spacing = 2,
+  },
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+})

@@ -1,25 +1,30 @@
 local map = vim.keymap.set
 
--- Reset terminal navigation
+-- ##########################
+-- ## General Key Mappings ##
+-- ##########################
+
+-- Reset terminal navigation (ensure proper terminal handling)
 map("t", "<C-w>", "<C-w>")
 
--- TIP: Disable arrow keys in normal mode
-map("n", "<left>", "<cmd>echo 'Use vim motion!<CR>'")
-map("n", "<right>", "<cmd>echo 'Use vim motion!<CR>'")
-map("n", "<up>", "<cmd>echo 'Use vim motion!<CR>'")
-map("n", "<down>", "<cmd>echo 'Use vim motion!<CR>'")
+-- Disable arrow keys in normal mode (encourage Vim motion)
+local function disable_arrows()
+  return "<cmd>echo 'Use vim motion!<CR>'"
+end
 
--- Default keymaps
-map("n", "<Esc>", "<cmd>nohlsearch<CR>")
-map("i", "jj", "<Esc>")
-map("n", "<C-a>", "gg<S-v>G")
+map("n", "<left>", disable_arrows())
+map("n", "<right>", disable_arrows())
+map("n", "<up>", disable_arrows())
+map("n", "<down>", disable_arrows())
 
--- Quit
-map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
+-- Miscellaneous normal mode mappings
+map("n", "<Esc>", "<cmd>nohlsearch<CR>")  -- Clear search highlights
+map("i", "jj", "<Esc>")  -- Fast exit insert mode
+map("n", "<C-a>", "gg<S-v>G")  -- Select all content
 
--- Increment/decrement
-map("n", "+", "<C-a>")
-map("n", "-", "<C-x>")
+-- #######################
+-- ## Window Management ##
+-- #######################
 
 -- Window navigation
 map({ "n", "t" }, "<C-h>", "<C-w>h", { desc = "Go to left window" })
@@ -28,56 +33,75 @@ map({ "n", "t" }, "<C-k>", "<C-w>k", { desc = "Go to above window" })
 map({ "n", "t" }, "<C-l>", "<C-w>l", { desc = "Go to right window" })
 
 -- Resize window
-map("n", "<C-w><left>", "<C-w><", { desc = "Increase window size left" })
-map("n", "<C-w><right>", "<C-w>>", { desc = "Increase window size right" })
-map("n", "<C-w><up>", "<C-w>+", { desc = "Increase window size up" })
-map("n", "<C-w><down>", "<C-w>-", { desc = "Increase window size down" })
+map("n", "<C-w><left>", "<C-w><", { desc = "Resize window left" })
+map("n", "<C-w><right>", "<C-w>>", { desc = "Resize window right" })
+map("n", "<C-w><up>", "<C-w>+", { desc = "Resize window up" })
+map("n", "<C-w><down>", "<C-w>-", { desc = "Resize window down" })
+
+-- ##################
+-- ## Tab Management ##
+-- ##################
 
 -- Tabs
 map("n", "te", "tabedit", { desc = "Edit tab" })
-map("n", "<tab>", ":tabnext<Return>")
-map("n", "<S-tab>", ":tabprev<Return>")
-map("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "New [T]ab [O]pen" })
-map("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "[T]ab E[x]it" })
-map("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "[T]ab [N]ext" })
-map("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "[T]ab [P]revious" })
-map("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "[T]ab Current Bu[f]fer" })
+map("n", "<tab>", ":tabnext<Return>", { desc = "Next tab" })
+map("n", "<S-tab>", ":tabprev<Return>", { desc = "Previous tab" })
+map("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "New tab" })
+map("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" })
+map("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Next tab" })
+map("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Previous tab" })
+map("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" })
 
--- Window management
-map("n", "<leader>sv", "<c-W>s", { desc = "[S]plit Window [V]ertically" })
-map("n", "<leader>sh", "<c-W>v", { desc = "[S]plit Window [H]orizontally" })
-map("n", "<leader>se", "<c-W>=", { desc = "[S]plits [E]qual Size" })
-map("n", "<leader>sx", "<cmd>close<CR>", { desc = "[S]plit E[x]it" })
+-- ########################
+-- ## Window Splitting ##
+-- ########################
 
--- Vim maximizer
-map("n", "<leader>s+", "<cmd>MaximizerToggle<CR>", { desc = "[S]plit Vim Maximizer" })
+-- Window split management
+map("n", "<leader>sv", "<c-W>s", { desc = "Split window vertically" })
+map("n", "<leader>sh", "<c-W>v", { desc = "Split window horizontally" })
+map("n", "<leader>se", "<c-W>=", { desc = "Equalize window sizes" })
+map("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" })
 
--- Navigate between quickfix items
-map("n", "<leader>h", "<cmd>cnext<CR>zz", { desc = "[] Forward qfixlist" })
-map("n", "<leader>j", "<cmd>cprev<CR>zz", { desc = "[] Backward qfixlist" })
+-- Vim Maximizer
+map("n", "<leader>s+", "<cmd>MaximizerToggle<CR>", { desc = "Toggle Vim maximizer" })
 
--- Undo tree
-map("n", "<leader>ut", vim.cmd.UndotreeToggle, { desc = "[U]ndo [T]ree" })
+-- ##############################
+-- ## Search & Navigation Mappings ##
+-- ##############################
+
+-- Navigation through quickfix list
+map("n", "<leader>h", "<cmd>cnext<CR>zz", { desc = "Next quickfix item" })
+map("n", "<leader>j", "<cmd>cprev<CR>zz", { desc = "Previous quickfix item" })
+
+-- Undo tree toggle
+map("n", "<leader>ut", vim.cmd.UndotreeToggle, { desc = "Toggle undo tree" })
+
+-- ##########################
+-- ## Terminal Mode Mappings ##
+-- ##########################
 
 -- Exit terminal mode
 map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
--- -- Scroll window one line up/down -- ??
--- map("i", "<C-e>", "<C-x><C-e>")
--- map("i", "<C-y>", "<C-x><C-y>")
+-- ######################
+-- ## Custom Navigation ##
+-- ######################
 
--- Navigation
+-- Navigate to function start/end
 map("n", "[[", function()
   vim.fn.search("^<(template<bar>script<bar>style)", "bW")
-end, { desc = "Function Start" })
+end, { desc = "Navigate to function start" })
 
 map("n", "]]", function()
   vim.fn.search("^<(template)<bar>script<bar>style", "W")
-end, { desc = "Function End" })
+end, { desc = "Navigate to function end" })
+
+-- ##################
+-- ## Plugin Mappings ##
+-- ##################
 
 -- Live Server
-vim.keymap.set("n", "<leader>ls", ":split | term live-server<CR>", { desc = "Enable [L]ive [S]erver", noremap = true, silent = true })
+map("n", "<leader>ls", ":split | term live-server<CR>", { desc = "Launch Live Server", noremap = true, silent = true })
 
--- ## PLUGINS ## --
--- SSR
-map({ "n", "x" }, "<leader>sr", function() require("ssr").open() end, { desc = "[S]earch [R]eplace (SSR)"})
+-- SSR (Search and Replace)
+map({ "n", "x" }, "<leader>sr", function() require("ssr").open() end, { desc = "Search and Replace (SSR)" })
