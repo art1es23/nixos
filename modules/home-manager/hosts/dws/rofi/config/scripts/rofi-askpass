@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
-# FIXME: Need to change title from 'Password' to dynamic
+# Set dynamic prompt
+PROMPT="$1"  # Accept the prompt as an argument
 
-rofi -dmenu -password -i -no-fixed-num-lines -p "Password:" \
+# Check if the prompt contains "password" (case insensitive)
+if [[ "$PROMPT" =~ [Pp]assword ]]; then
+  # Use password mode (masked input) for password prompts
+  rofi -dmenu -password -i -p "$PROMPT" \
     -theme $HOME/.config/rofi/template/askpass.rasi
-
-# rofi -dmenu -p "Password: " -l 0 -config "$HOME/.config/hypr/rofi/regular.rasi"
+else
+  # Don't use password mode for other prompts
+  rofi -dmenu -i -p "$PROMPT" \
+    -theme $HOME/.config/rofi/template/askpass.rasi
+fi

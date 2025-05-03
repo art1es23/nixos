@@ -2,10 +2,9 @@
 @import "themes/default.rasi"
 
 window {
-    /* Change this value according to your screen height */
     y-offset: -10%;
-    /* This padding is given just for aesthetic purposes */
-    padding:    40px;
+    padding:    20px;
+    height: 8.5%;
 }
 
 entry {
@@ -14,6 +13,6 @@ entry {
      * at the end of the entry
      */
     expand: true;
-    /* Keeping using 200px so that long passwords can be typed */
     width: 220px;
+    placeholder: "Input..";
 }
