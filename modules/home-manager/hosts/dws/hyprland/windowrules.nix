@@ -24,6 +24,8 @@
       "move 0 0, class:^(flameshot)$"
       "pin, class:^(flameshot)$"
       "monitor 1, class:^(flameshot)$"
+      "float, class:^(feh)$"
+      "move 0 0, class:^(feh)$"
     ];
   };
 }

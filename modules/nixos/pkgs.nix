@@ -65,9 +65,11 @@
     eza
     eget
     fd
+    feh
     ffmpeg
     ffmpegthumbnailer
     fzf
+    gifsicle
     glow # Markdown preview
     gomi # Replacement for UNIX rm command
     jq
@@ -80,6 +82,8 @@
     thefuck
     tldr
     sttr # Change text format
+    sxiv
+    vhs
     wget
     xh
     yq

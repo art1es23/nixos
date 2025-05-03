@@ -1,57 +1,84 @@
 #!/usr/bin/env bash
-
+# Path configuration
 WALLPAPER_DIR="$HOME/nixos/screenshot"
-ICON_DIR="$HOME/.local/share/icons/rofi-wallpapers"
+ICON_THEME_NAME="rofi-wallpapers"
+ICON_DIR="$HOME/.local/share/icons/$ICON_THEME_NAME"
+SCRIPT_DIR="$HOME/.config/rofi/scripts"
+ROFI_THEME="$HOME/.config/rofi/template/wallpaper.rasi"
 
 # Create icon directory if it doesn't exist
 mkdir -p "$ICON_DIR"
 
-# Define arrays for image, gif, and video types
-IMAGE_TYPES=("png" "jpg" "jpeg")
+# Define arrays for image and gif types
+IMAGE_TYPES=("png" "jpg" "jpeg" "webp" "avif")
 GIF_TYPES=("gif")
 
-# Create previews for image, gif, and video files
+# Generate thumbnails for GIFs only
+# (We'll use direct paths for regular images)
 find "$WALLPAPER_DIR" -type f | while read -r img; do
-  # Extract the file extension
-  EXT="${img##*.}"
-
-  # Handle images (png, jpg, jpeg)
-  if [[ " ${IMAGE_TYPES[@]} " =~ " ${EXT} " ]]; then
-    # Create a symlink to the image in the preview folder
-    ln -sf "$img" "$ICON_DIR/$(basename "$img")"
+  ext="${img##*.}"
+  filename="$(basename "$img")"
   
-  # Handle GIFs
-  elif [[ " ${GIF_TYPES[@]} " =~ " ${EXT} " ]]; then
-    # Create a preview image for the GIF (first frame)
-    thumbnail_path="$ICON_DIR/$(basename "$img").thumbnail.png"
-    ffmpegthumbnailer -i "$img" -o "$thumbnail_path" -s 0
-    # Create symlink to the original GIF file, not the thumbnail
-    ln -sf "$img" "$ICON_DIR/$(basename "$img")"
-  
+  if [[ " ${GIF_TYPES[@]} " =~ " ${ext} " ]]; then
+    thumb="$ICON_DIR/${filename}.thumbnail.png"
+    if [ ! -f "$thumb" ]; then
+      ffmpegthumbnailer -i "$img" -o "$thumb" -s 0
+    fi
+  fi
 done
+
+# Make sure the icon cache is updated
+gtk-update-icon-cache "$ICON_DIR" >/dev/null 2>&1
+
+# Create a temporary file to store wallpaper paths
+TEMP_FILE=$(mktemp)
+MENU_FILE=$(mktemp)
+
+# Build menu items with proper icon paths
+while IFS= read -r img; do
+  filename="$(basename "$img")"
+  ext="${img##*.}"
+  
+  if [[ " ${IMAGE_TYPES[@]} " =~ " ${ext} " ]] || [[ " ${GIF_TYPES[@]} " =~ " ${ext} " ]]; then
+    # Store original path in temp file
+    echo "$img" >> "$TEMP_FILE"
+    
+    # For GIFs, use thumbnail icon
+    if [[ " ${GIF_TYPES[@]} " =~ " ${ext} " ]]; then
+      # Ensure the thumbnail exists
+      thumb="$ICON_DIR/${filename}.thumbnail.png"
+      if [ ! -f "$thumb" ]; then
+        ffmpegthumbnailer -i "$img" -o "$thumb" -s 0
+      fi
+      echo "$filename|$thumb" >> "$MENU_FILE"
+    else
+      echo "$filename|$img" >> "$MENU_FILE"
+    fi
+  fi
+done < <(find "$WALLPAPER_DIR" -type f | sort)
 
 # Ensure swww-daemon is running
 pgrep -x swww-daemon >/dev/null || (swww-daemon & sleep 0.5)
 
-# Use Rofi to select wallpaper with previews in a grid layout
-CHOICE=$(find "$ICON_DIR" -type f | rofi -dmenu -show-icons -theme-str \
-  'listview { columns: 5; lines: 5; }' -p "Choose wallpaper" -i)
+# Show menu using rofi with proper icon display
+SELECTION=$(cat "$MENU_FILE" | awk -F'|' '{print $1"\0icon\x1f"$2}' | rofi -dmenu -i -theme "$ROFI_THEME" -p "Choose wallpaper" -format i)
 
-# Apply selected wallpaper using swww to all outputs
-if [ -n "$CHOICE" ]; then
-  # Remove the .thumbnail.png suffix from the file path
-  SELECTED="${CHOICE%.thumbnail.png}"
-
-  # Check if the original file exists before applying
-  if [ -f "$SELECTED" ]; then
-    EXT="${SELECTED##*.}"
-
+# Check if user made a selection
+if [ -n "$SELECTION" ]; then
+  # Get the original image path using the selection index
+  SELECTED_PATH=$(sed -n "$((SELECTION+1))p" "$TEMP_FILE")
+  
+  if [ -f "$SELECTED_PATH" ]; then
     for output in $(swww query | cut -d: -f1); do
-      # Ensure we apply the correct file and not the thumbnail version
-      swww img "$SELECTED" --outputs "$output" \
+      swww img "$SELECTED_PATH" --outputs "$output" \
         --transition-type any --transition-fps 60 --transition-duration 1
     done
+    
+    echo "Wallpaper set: $SELECTED_PATH"
   else
-    echo "Original file $SELECTED not found."
+    echo "Original file not found: $SELECTED_PATH"
   fi
 fi
+
+# Clean up temporary files
+rm -f "$TEMP_FILE" "$MENU_FILE"

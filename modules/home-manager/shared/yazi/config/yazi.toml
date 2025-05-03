@@ -36,6 +36,7 @@ edit = [
 ]
 
 open = [{ run = 'xdg-open "$@"', desc = "Open" }]
+open_image = [{ run = 'feh "$@"', desc = "Open Image" }]
 
 reveal = [
 	{ run = 'xdg-open "$(dirname "$0")"', desc = "Open dir in nemo" },
@@ -85,7 +86,7 @@ rules = [
 	{ name = "*.aup3", use = ["aup3edit", "reveal"] },
 
 	{ mime = "text/*", use = ["edit", "reveal"] },
-	{ mime = "image/*", use = ["open", "reveal"] },
+	{ mime = "image/*", use = ["open_image", "reveal"] },
 	{ mime = "audio/*", use = ["play", "reveal"] },
 	{ mime = "video/*", use = ["play", "reveal"] },
 	{ mime = "inode/x-empty", use = ["edit", "reveal"] },
