@@ -7,7 +7,6 @@
 @define-color activegreen #26A65B;
 
 * {
-  min-height: 0;
   font-family: "Fira Code", Roboto, Helvetica, Arial, sans-serif;
   font-size: 14px;
 }
@@ -20,76 +19,14 @@ window#waybar {
 }
 
 button {
-  /* Use box-shadow instead of border so the text isn't offset */
   box-shadow: inset 0 -3px transparent;
-  /* Avoid rounded borders under each button name */
   border: none;
   border-radius: 35px;
   padding: 5px;
-  margin: 0px;
 }
 
-/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
 button:hover {
   background: inherit;
-}
-
-#window {
-  margin: 0 10px;
-  padding: 0 20px;
-  background: @bg;
-  /* box-shadow: inset 0 -3px @bordercolor; */
-  border-radius: 35px;
-}
-
-#workspaces {
-  background: @bg;
-  /* box-shadow: inset 0 -3px @bordercolor; */
-  border-radius: 35px;
-}
-
-#workspaces button {
-  color: @fg;
-}
-
-#workspaces button.urgent {
-  color: @alert;
-}
-#workspaces button.empty {
-  color: @bordercolor;
-}
-
-#workspaces button.active {
-  color: @highlight;
-}
-
-/*River Tags/Workspaces*/
-#tags {
-  background: @bg;
-  box-shadow: inset 0 -3px @bordercolor;
-  border-radius: 35px;
-}
-
-#tags button {
-  color: @bordercolor;
-  background: @bg;
-
-  /*If you need round border icons*/
-  border-radius: 0px;
-  padding: 5px;
-  margin: 0px;
-}
-
-#tags button.occupied {
-  color: @fg;
-}
-
-#tags button.focused {
-  color: @highlight;
-}
-
-#tags button.urgent {
-  color: @alert;
 }
 
 #clock,
@@ -118,31 +55,85 @@ button:hover {
 #custom-wifi,
 #custom-kdeconnect,
 #custom-bluetooth,
-#custom-power,
 #custom-separator,
 #idle_inhibitor,
 #window,
 #mpd {
-  padding: 5px;
-  margin: 0px 5px;
   color: @bordercolor;
+}
+
+#window {
+  margin: 0px 10px;
+  padding: 0px 12px;
+  background: @bg;
+  border-radius: 35px;
+}
+
+#workspaces {
+  background: @bg;
+  border-radius: 35px;
+  padding: 0px 12px;
+}
+
+#workspaces button {
+  color: @fg;
+}
+
+#workspaces button.urgent {
+  color: @alert;
+}
+
+#workspaces button.empty {
+  color: @bordercolor;
+}
+
+#workspaces button.active {
+  color: @highlight;
+}
+
+/*River Tags/Workspaces*/
+#tags {
+  background: @bg;
+  box-shadow: inset 0 -3px @bordercolor;
+  border-radius: 35px;
+}
+
+#tags button {
+  color: @bordercolor;
+  background: @bg;
+  border-radius: 0px;
+  padding: 5px;
+  margin: 0px;
+}
+
+#tags button.occupied {
+  color: @fg;
+}
+
+#tags button.focused {
+  color: @highlight;
+}
+
+#tags button.urgent {
+  color: @alert;
 }
 
 #custom-notification,
 #custom-wifi,
 #custom-kdeconnect,
 #custom-bluetooth,
-#custom-power,
 #idle_inhibitor {
   color: @bg;
+  margin: 0px 5px;
+  padding: 0px 5px;
 }
 
 #clock,
 #custom-group {
   color: @bg;
   background-color: @bordercolor;
-  margin: 0px 5px;
-  padding: 0px 10px;
+  margin-right: 5px;
+  padding: 0px 12px;
   border-radius: 35px;
 }
 
@@ -154,13 +145,15 @@ button:hover {
 
 #custom-power {
   color: @alert;
+  padding: 0 10px;
+  background: transparent;
+  margin: 0px;
 }
 
 #tray {
   margin: 0px;
   padding: 0px 12px;
   background: @bg;
-  /* box-shadow: inset 0 -3px @bordercolor; */
   border-radius: 35px;
 }
 
@@ -174,10 +167,9 @@ button:hover {
 #backlight,
 #wireplumber {
   background: @bg;
-  margin: 0 3px;
-  /* box-shadow: inset 0 -3px @bordercolor; */
+  margin: 0px 3px;
   border-radius: 35px;
-  padding: 0 10px;
+  padding: 0px 10px;
 }
 
 #network.disconnected,
@@ -203,4 +195,9 @@ label:focus {
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-direction: alternate;
+}
+
+/* make window module transparent when no windows present */
+window#waybar.empty #window {
+    background-color: transparent;
 }

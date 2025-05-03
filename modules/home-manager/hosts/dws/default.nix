@@ -7,6 +7,7 @@
     ./grimblast
     ./rofi
     ./hyprland
+    ./scripts
     ./waybar
     ./wtf
     ./flameshot.nix

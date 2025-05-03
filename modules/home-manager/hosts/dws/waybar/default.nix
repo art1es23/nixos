@@ -16,22 +16,19 @@
         spacing = 1;
         modules-left = [
           "battery"
+          "keyboard-state"
           "hyprland/workspaces"
           "river/tags"
           "tray"
         ];
         modules-center = [ "hyprland/window" ];
         modules-right = [
-          "network"
+          "group/music"
           "cpu"
           "memory"
           "temperature"
-          # "backlight"
-          "wireplumber"
           "clock"
-          "custom/separator"
           "group/custom-group"
-          "custom/separator"
           "custom/power"
         ];
 
@@ -70,6 +67,13 @@
           ];
         };
 
+        "group/music" = {
+          "orientation" = "horizontal";
+          "modules" = [
+            "wireplumber"
+          ];
+        };
+
         "hyprland/window" = {
           "format" = "{}";
           "separate-outputs" = true;
@@ -98,10 +102,27 @@
         };
 
         "clock" = {
-          "interval" = 60;
-          "format" = "  {:%a %b %d    %I:%M %p}";
-          "tooltip-format" = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
-          "format-alt" = "{:%Y-%m-%d %H:%M:%S  }";
+            "format" = " {:%H:%M}"; 
+            "format-alt" = "{:%A, %B %d, %Y (%R)}"; 
+            "tooltip-format" = "<tt><small>{calendar}</small></tt>"; 
+            "calendar" = {
+                        "mode"          = "year"; 
+                        "mode-mon-col"  = 3;
+                        "weeks-pos"     = "right"; 
+                        "on-scroll"     = 1;
+                        "format" = {
+                                  "months" =     "<span color='#ffead3'><b>{}</b></span>"; 
+                                  "days" =       "<span color='#ecc6d9'><b>{}</b></span>"; 
+                                  "weeks" =      "<span color='#99ffdd'><b>W{}</b></span>"; 
+                                  "weekdays" =   "<span color='#ffcc66'><b>{}</b></span>"; 
+                                  "today" =      "<span color='#ff6699'><b><u>{}</u></b></span>";
+                                  };
+                        };
+            "actions" =  {
+                        "on-click-right" = "mode"; 
+                        "on-scroll-up" = "shift_up"; 
+                        "on-scroll-down" = "shift_down";
+                        };
         };
 
         "temperature" = {
@@ -119,17 +140,19 @@
         "cpu" = {
           "interval" = 2;
           "format" = " {usage:>2}%";
-          "on-click" = "hyprctl dispatcher togglespecialworkspace monitor";
+          "on-click" = "bash $HOME/.config/scripts/monitoring";
         };
 
         "memory" = {
           "interval" = 2;
           "format" = " {:>2}%";
+          "on-click" = "bash $HOME/.config/scripts/monitoring";
         };
 
         "disk" = {
           "interval" = 15;
           "format" = "󰋊 {percentage_used:>2}%";
+          "on-click" = "bash $HOME/.config/scripts/monitoring";
         };
 
         "backlight" = {
@@ -156,6 +179,7 @@
           "format-linked" = "{ifname} (No IP) ";
           "format-disconnected" = "󰀦 Disconnected";
           "format-alt" = "{ifname}: {ipaddr}/{cidr}";
+          "on-click" = "bash $HOME/.config/scripts/monitoring";
         };
 
         "pulseaudio" = {
@@ -203,16 +227,7 @@
           "exec-on-event" = "true";
           "on-click" = "bash $HOME/.config/rofi/scripts/rofi-power";
           "tooltip" = false;
-          # "tooltip-format" = "Power Menu";
         };
-
-        # "custom/kdeconnect" = {
-        #   "format" = "{icon}";
-        #   "format-icons" = "";
-        #   "exec-on-event" = "true";
-        #   "on-click" = "kdeconnect-app";
-        #   "tooltip-format" = "KDE Connect";
-        # };
 
         "custom/bluetooth" = {
           "format" = "{icon}";

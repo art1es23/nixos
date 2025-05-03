@@ -11,8 +11,33 @@ theme='power'
 
 # CMDs
 lastlogin="$(last $USER | head -n1 | tr -s ' ' | cut -d' ' -f5,6,7)"
-uptime="$(uptime | sed -e 's/up //g')"
+# uptime="$(uptime | awk -F 'up ' '{print $2}' | awk -F ',' '{print $1}')"
 host=$(hostname)
+
+get_readable_uptime() {
+    local raw=$(uptime | sed 's/.* up //' | sed 's/, [0-9]* user.*//')
+
+    if [[ $raw =~ ([0-9]+)\ days?,?\ ?([0-9]+):([0-9]+) ]]; then
+        local days=${BASH_REMATCH[1]}
+        local hours=${BASH_REMATCH[2]}
+        local minutes=${BASH_REMATCH[3]}
+        echo "$days days, $hours h and $minutes min"
+    elif [[ $raw =~ ([0-9]+):([0-9]+) ]]; then
+        local hours=${BASH_REMATCH[1]}
+        local minutes=${BASH_REMATCH[2]}
+        if [[ $hours -eq 0 ]]; then
+            echo "$minutes minutes"
+        else
+            echo "$hours hours and $minutes min"
+        fi
+    elif [[ $raw =~ ([0-9]+)\ min ]]; then
+        echo "${BASH_REMATCH[1]} minutes"
+    else
+        echo "Unknown uptime format: $raw"
+    fi
+}
+
+uptime=$(get_readable_uptime)
 
 # Options
 hibernate=''

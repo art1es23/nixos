@@ -34,6 +34,7 @@
     catdoc
     odt2txt
     mpv
+    iniparser
 
     xfce.xfce4-settings
     xfce.xfce4-power-manager
@@ -123,9 +124,11 @@
     acpi # Battery
     bandwhich
     btop
+    cava
     circumflex # Hackenews
     croc # Transfering files between PCs
     ddgr # DuckDuckGo
+    hledger
     hyperfine # Benchmark for tools/cmds
     gallery-dl # Image/s download
     gtt # Translator
@@ -137,6 +140,7 @@
     unar # Archive unpacker
     upower
     pik
+    puffin
     terminaltexteffects
     typioca # Typing checker
     speedtest-cli
