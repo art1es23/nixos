@@ -1,6 +1,7 @@
 {
   wayland.windowManager.hyprland.settings = {
     bind = [
+      "$mod, Escape, exec, $shutdown"
       "$mod, Z, exec, $terminal"
       "$mod, Q, killactive,"
       "$mod, M, exit,"

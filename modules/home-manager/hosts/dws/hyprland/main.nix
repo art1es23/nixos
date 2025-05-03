@@ -39,10 +39,11 @@
         "GRIMSHOT_DIR,$HOME/Pictures/Screenshots"
       ];
 
+      "$shutdown" = "bash $HOME/.config/rofi/scripts/rofi-power";
       "$terminal" = "kitty";
       "$fileManager" = "kitty yazi";
       "$menu" = "bash $HOME/.config/rofi/scripts/rofi-launcher";
-      "$screenshot" = "bash $HOME/.config/grimblast/scripts/screenshot.sh";
+      "$screenshot" = "bash $HOME/.config/grimblast/scripts/screenshot";
       "$wallpaper" = "bash $HOME/.config/rofi/scripts/rofi-wallpaper";
       "$mod" = "SUPER";
 
