@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Get the new color in hex
+NEW_COLOR=$(hyprpicker -f hex)
+
+# Extract any valid hex color codes from the current clipboard content
+OLD_COLORS=$(wl-paste | grep -Eo '#[A-Fa-f0-9]{6}' || true)
+
+# Remove any trailing newline or space from the current color list
+OLD_COLORS=$(echo "$OLD_COLORS" | sed ':a;N;$!ba;s/\n//g')
+
+# Append the new color, ensuring no duplicates
+UPDATED_CLIP=$(printf "%s %s" "$OLD_COLORS" "$NEW_COLOR" | awk '!seen[$0]++')  # Avoid duplicates
+
+# Update clipboard with the combined color list
+echo -n "$UPDATED_CLIP" | wl-copy
+
+# Optional: Send a notification
+if command -v notify-send &>/dev/null; then
+  notify-send "Color added to clipboard" "$NEW_COLOR"
+fi
+
+# Output the updated list to the terminal
+echo "Updated clipboard color list:"
+echo "$UPDATED_CLIP"

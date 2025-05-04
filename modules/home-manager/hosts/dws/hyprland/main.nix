@@ -45,6 +45,7 @@
       "$menu" = "bash $HOME/.config/rofi/scripts/rofi-launcher";
       "$screenshot" = "bash $HOME/.config/grimblast/scripts/screenshot";
       "$wallpaper" = "bash $HOME/.config/rofi/scripts/rofi-wallpaper";
+      "$colorpicker" = "bash $HOME/.config/scripts/pick-color";
       "$mod" = "SUPER";
 
       "exec-once" = [

@@ -85,6 +85,9 @@
 
       # Change wallpaper
       "$mod SHIFT, W, exec, $wallpaper"
+
+      # Pick color
+      "$mod SHIFT, C, exec, $colorpicker"
     ];
 
     # Move/resize windows with mainMod + LMB/RMB and dragging
