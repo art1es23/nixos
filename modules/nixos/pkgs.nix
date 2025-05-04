@@ -14,185 +14,188 @@
   };
 
   environment.systemPackages = with pkgs; [
-    # System
-    clang-tools
-    gcc
+    # System Base
     cargo
-    lua
-    go
-    nodejs
-    pnpm
-    pciutils
-    tcpdump
-    lm_sensors
-    wireguard-tools
-    inetutils
-    gnumake
-    pandoc
-    exiftool
-    xlsx2csv
-    catdoc
-    odt2txt
-    mpv
-    iniparser
-
-    xfce.xfce4-settings
-    xfce.xfce4-power-manager
-    xfce.libxfce4ui
-    xfce.libxfce4util
+    clang-tools
     dbus
-    glib
-    gtk3
-
+    gcc
+    gnumake
+    go
     hunspell
-    hunspellDicts.uk_UA
     hunspellDicts.en_US
-
-    # Dev environment
-    kitty
-    oh-my-posh
-    neovim
-    meld
-    posting
-    tmux
-
-    # CLI Tools
-    age
-    atuin
-    bat
-    curl
-    dasel
-    direnv
-    eza
-    eget
-    fd
-    feh
-    ffmpeg
-    ffmpegthumbnailer
-    fzf
-    gifsicle
-    glow # Markdown preview
-    gomi # Replacement for UNIX rm command
-    jq
-    jql
-    jless
-    navi # Interactive cheatsheet tool
-    nh
-    restic # Backup tool
-    ripgrep
-    thefuck
-    tldr
-    sttr # Change text format
-    sxiv
-    vhs
-    wget
-    xh
-    yq
-    zoxide
-
-    #CLI Development
-    asdf-vm
-    atac
-    csvlens
-    gama # Managing Github Actions
-    grex # Generate RexExp
-    gitnr # .gitignore generator
-    redis
-    harlequin # SQL IDE
-    heroku
-    hub # Github
-    openssh
-    ots # Share e2e encrypted secrets via one-time URL
-    k9s
-    # kaskade # TUI Apache Kafka
-    koji # git-commits generator
-    ktop
-    lazygit
-    lazydocker
-    lazysql
-    live-server
-    nap # Code snippets manager
-    npm-check-updates
-    rainfrog # Postgres IDE
-    serie # GIT commit tree preview
-    semantic-release # Automated vers management and package publishing
-    sshs
-    surge-cli # Static web-publishing
-    tailspin # Log-previewer
-
-    # CLI Additional
-    acpi # Battery
-    bandwhich
-    btop
-    cava
-    circumflex # Hackenews
-    croc # Transfering files between PCs
-    ddgr # DuckDuckGo
-    hledger
-    hyperfine # Benchmark for tools/cmds
-    gallery-dl # Image/s download
-    gtt # Translator
-    gum
-    fastfetch
-    lychee # Async link checker
-    okular
-    ouch # Compress and decompress files and dirs
-    unar # Archive unpacker
-    upower
-    pik
-    puffin
-    terminaltexteffects
-    typioca # Typing checker
-    speedtest-cli
-    scc
-    streamlink # Extract streams
-    wiki-tui
-    wiper # Disk analyzer
-    wtf
-
-    # AI
-    aichat
-    ollama
-    oterm
-
-    # Additional
-    _1password-gui
-    spotify
-    vlc
-    libreoffice-qt
-    gimp
-    figma-linux
-    # transmission_4
-    file-roller
-    unar
-
-    # Browsers
-    firefox
-    google-chrome
-
-    # Development
-    postman
-
-    #Productivity
-    obsidian
-    logseq
-    # notion
-
-    # Social
-    telegram-desktop
-    discord
-    fractal
-    iamb # Matrix client
-
-    # LSP Servers
-    nil
-    lua-language-server
+    hunspellDicts.uk_UA
+    lua
+    nodejs
+    pciutils
+    pnpm
+    
+    # LSP Servers (alphabetized)
     bash-language-server
-    yaml-language-server
-    typescript-language-server
+    eslint_d
+    lua-language-server
+    nil
     nixfmt-rfc-style
     prettierd
-    eslint_d
+    typescript-language-server
+    yaml-language-server
+
+      # Archive & Compression
+    file-roller  # GUI archive manager
+    ouch         # Compress/decompress files and dirs
+    unar         # Archive unpacker (appears twice in your list)
+    
+    # Documents
+    catdoc       # Extract text from MS-DOC
+    libreoffice-qt
+    odt2txt      # Convert ODT to text
+    okular       # Document viewer
+    pandoc       # Document converter
+    xlsx2csv     # Convert Excel to CSV
+    
+    # Images
+    exiftool     # Image metadata
+    feh          # Image viewer
+    gimp         # Image editor
+    imagemagick  # Image manipulation
+    sxiv         # Simple X Image Viewer
+    
+    # Video/Audio
+    cava         # Audio visualizer
+    ffmpeg       # Video/audio converter
+    ffmpegthumbnailer
+    gallery-dl   # Image/video downloader
+    gifsicle     # GIF manipulation
+    mpv          # Media player
+    pavucontrol
+    streamlink   # Extract streams
+
+      # Core CLI Tools
+    age          # Encryption tool
+    atuin        # Shell history
+    bat          # Better cat
+    curl         # HTTP requests
+    dasel        # Data structure processor
+    direnv       # Directory-based environments
+    eget         # GitHub release downloader
+    eza          # Modern ls replacement
+    fd           # Better find
+    fzf          # Fuzzy finder
+    glow         # Markdown preview
+    gomi         # Safe rm replacement
+    hyperfine    # Command benchmarking
+    jless        # JSON viewer
+    jq           # JSON processor
+    jql          # JSON query
+    lychee       # Link checker
+    navi         # Interactive cheatsheet
+    nh           # Nix helper
+    restic       # Backup tool
+    ripgrep      # Better grep
+    speedtest-cli
+    sttr         # Text format changer
+    thefuck      # Command correction
+    tldr         # Command examples
+    vhs          # Terminal recorder
+    wget         # File downloader
+    xh           # HTTP client
+    yq           # YAML processor
+    zoxide       # Better cd
+    
+    # System Monitoring/Management
+    acpi         # Battery info
+    bandwhich    # Network usage
+    btop         # System monitor
+    fastfetch    # System info
+    lm_sensors   # Hardware monitoring
+    iotop      # Monitor disk I/O
+    rsync      # Efficient file transfer/synchronization
+    scc          # Code counter
+    upower       # Power management
+    wiper        # Disk analyzer
+    wtf          # Personal dashboard
+    
+    # Network Tools
+    croc         # File transfer between PCs
+    dig        # DNS lookup utility
+    inetutils    # Network utilities
+    iperf3     # Network speed testing
+    mtr        # Traceroute and ping combined
+    nmap       # Network discovery and security auditing
+    ots          # Share encrypted secrets
+    tcpdump      # Packet analyzer
+    traceroute # Network route tracing
+    wireguard-tools
+    whois      # Domain registration data
+    
+    # Development Environment
+    asdf-vm      # Runtime version manager
+    csvlens      # CSV viewer
+    gama         # GitHub Actions manager
+    gitnr        # .gitignore generator
+    grex         # Generate RegExp
+    harlequin    # SQL IDE
+    heroku       # PaaS platform CLI
+    hub          # GitHub CLI
+    k9s          # Kubernetes UI
+    kitty        # Terminal emulator
+    koji         # Git commits generator
+    ktop         # Kubernetes Monitoring
+    lazydocker   # Docker TUI
+    lazygit      # Git TUI
+    lazysql      # SQL client
+    live-server  # Local dev server
+    meld         # Diff viewer
+    nap          # Code snippets manager
+    neovim       # Text editor
+    npm-check-updates
+    oh-my-posh   # Prompt theme engine
+    openssh      # SSH client/server
+    posting      # TUI HTTP client
+    rainfrog     # Postgres IDE
+    redis        # In-memory data structure store
+    semantic-release
+    serie        # Git commit tree preview
+    sshs         # SSH connection manager
+    surge-cli    # Static web publishing
+    tailspin     # Log previewer
+    tmux         # Terminal multiplexer
+
+      # Browsers
+    firefox
+    google-chrome
+    
+    # Productivity
+    _1password-gui
+    logseq       # Knowledge base
+    obsidian     # Note-taking
+    postman      # API testing
+    
+    # Social/Communication
+    discord
+    fractal      # GNOME Matrix client
+    iamb         # Matrix client
+    telegram-desktop
+    
+    # Media & Entertainment
+    figma-linux
+    spotify
+    
+    # AI Tools
+    aichat
+    ollama       # Local LLM runner
+    oterm        # Terminal client for Ollama
+    
+    # Misc
+    circumflex   # Hacker News client
+    ddgr         # DuckDuckGo CLI
+    gtt          # Translator
+    gum          # Shell script helper
+    hledger      # Accounting
+    pik          # Process Interactive Kill
+    puffin       # Terminal dashboard for hledger
+    terminaltexteffects
+    typioca      # Typing checker
+    wiki-tui     # Wikipedia TUI
   ];
 
   programs = {

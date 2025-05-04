@@ -27,7 +27,6 @@
     rofi-emoji
     rofi-vpn
     rofi-calc
-    # ulauncher
     hypridle
     hyprlock
     hyprpicker
@@ -39,11 +38,9 @@
     cliphist
     grimblast
 
-    pavucontrol
     hyprpolkitagent
 
     libsForQt5.xwaylandvideobridge
-    libnotify
     xdg-desktop-portal-gtk
     xdg-desktop-portal-hyprland
     xdg-utils  # Required for `xdg-open`
