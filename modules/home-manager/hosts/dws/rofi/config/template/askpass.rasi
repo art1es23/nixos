@@ -4,7 +4,7 @@
 window {
     y-offset: -10%;
     padding:    20px;
-    height: 8.5%;
+    height: 87.5px;
 }
 
 entry {
