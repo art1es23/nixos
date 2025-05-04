@@ -34,13 +34,13 @@
       ];
 
       background = {
-        path = "$HOME/nixos/screenshot/berserk.png";
+        path = "$HOME/nixos/screenshot/749693.jpg";
         blur_passes = 2;
         blur_size = 5;
       };
 
       input-field = {
-        size = "250, 60";
+        size = "275, 60";
         outline_thickness = 2;
         dots_size = 0.2; # Scale of input-field height, 0.2 - 0.8
         dots_spacing = 0.35; # Scale of dots' absolute size, 0.0 - 1.0
@@ -51,11 +51,12 @@
         fade_on_empty = false;
         rounding = -1;
         check_color = "rgb(204, 136, 34)";
-        placeholder_text = "<i><span foreground='##cdd6f4'>Input Password...</span></i>";
+        placeholder_text = "<i><span foreground='##cdd6f4'>Input Password</span></i>";
         hide_input = false;
         position = "0, -200";
         halign = "center";
         valign = "center";
+        capslock_color = "rgb(255, 134, 0)";
       };
     };
   };
