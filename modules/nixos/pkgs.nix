@@ -28,6 +28,9 @@
     nodejs
     pciutils
     pnpm
+    sddm-sugar-dark
+    libsForQt5.qt5.qtquickcontrols2   
+    libsForQt5.qt5.qtgraphicaleffects
     
     # LSP Servers (alphabetized)
     bash-language-server
@@ -244,13 +247,8 @@
       sddm = {
         enable = true;
         wayland.enable = true;
+        theme = "sugar-dark";
       };
     };
-    # xserver.displayManager = {
-    #   gdm = {
-    #     enable = true;
-    #     wayland = true;
-    #   };
-    # };
   };
 }
