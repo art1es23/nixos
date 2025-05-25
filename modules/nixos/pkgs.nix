@@ -46,6 +46,7 @@
     file-roller  # GUI archive manager
     ouch         # Compress/decompress files and dirs
     unar         # Archive unpacker (appears twice in your list)
+    unzip
     
     # Documents
     catdoc       # Extract text from MS-DOC
@@ -190,6 +191,7 @@
     
     # Misc
     circumflex   # Hacker News client
+    cmatrix
     ddgr         # DuckDuckGo CLI
     gtt          # Translator
     gum          # Shell script helper
