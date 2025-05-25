@@ -32,6 +32,7 @@ antigen bundle npm
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle wfxr/forgit
 
 # antigen bundle <<EOBUNDLES
 #     # Bundles from the default repo (robbyrussell's oh-my-zsh)
@@ -153,6 +154,10 @@ alias v="nvim"
 
 alias gst="lazygit"
 
+alias p="posting"
+
+alias y="yazi"
+
 alias cnix="nvim ~/nixos"
 alias cdnix="cdd ~/nixos"
 
@@ -161,6 +166,7 @@ alias cz="vim ~/.config/zsh"
 
 alias visudo="sudo -E visudo"
 
+alias pf="puffin"
 alias d="ddgr"
 
 alias jl="jless"

@@ -163,6 +163,7 @@
     surge-cli    # Static web publishing
     tailspin     # Log previewer
     tmux         # Terminal multiplexer
+    zsh-forgit   # Utility tool powered by fzf for using git interactively
 
       # Browsers
     firefox
@@ -199,6 +200,7 @@
     pik          # Process Interactive Kill
     puffin       # Terminal dashboard for hledger
     terminaltexteffects
+    ticker       # Terminal stock ticker with live updates and position tracking
     typioca      # Typing checker
     wiki-tui     # Wikipedia TUI
   ];
