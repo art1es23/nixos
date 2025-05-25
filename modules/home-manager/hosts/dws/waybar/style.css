@@ -81,6 +81,11 @@ button:hover {
 
 #workspaces button {
   color: @fg;
+  padding: 5px 7px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 20px;
 }
 
 #workspaces button.urgent {
