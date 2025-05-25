@@ -52,7 +52,7 @@
     catdoc       # Extract text from MS-DOC
     libreoffice-qt
     odt2txt      # Convert ODT to text
-    okular       # Document viewer
+    kdePackages.okular       # Document viewer
     pandoc       # Document converter
     xlsx2csv     # Convert Excel to CSV
     

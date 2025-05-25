@@ -38,11 +38,11 @@
     };
 
     printing.enable = true;
+    pulseaudio.enable = false;
   };
 
   hardware = {
     bluetooth.enable = true;
-    pulseaudio.enable = false;
   };
 
   security.rtkit.enable = true;
