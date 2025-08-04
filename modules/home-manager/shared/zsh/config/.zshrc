@@ -21,6 +21,18 @@ export SESSION_MANAGER="unix:path=/run/user/1000/bus" #### FIXME
 
 export XDG_SCREENSHOTS_DIR="$HOME/Pictures/Screenshots"
 
+# asdf
+if command -v asdf >/dev/null 2>&1; then
+    # Enable asdf completions for zsh
+    fpath=(${ASDF_DIR}/completions $fpath)
+    autoload -Uz compinit && compinit
+    
+    # Set up asdf environment - these paths will be managed by Home Manager
+    export ASDF_CONFIG_FILE="$HOME/.config/asdf/.asdfrc"
+    export ASDF_DEFAULT_TOOL_VERSIONS_FILENAME="$HOME/.config/asdf/.tool-versions"
+    export ASDF_DATA_DIR="$HOME/.config/asdf"
+fi
+
 # Antigen
 source "$ZSH/plugins/antigen.zsh"
 

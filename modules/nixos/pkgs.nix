@@ -84,6 +84,7 @@
     eza          # Modern ls replacement
     fd           # Better find
     fzf          # Fuzzy finder
+    gh
     glow         # Markdown preview
     gomi         # Safe rm replacement
     hyperfine    # Command benchmarking
@@ -109,9 +110,12 @@
     acpi         # Battery info
     bandwhich    # Network usage
     btop         # System monitor
+    ethtool
     fastfetch    # System info
+    glxinfo
     lm_sensors   # Hardware monitoring
     iotop      # Monitor disk I/O
+    iw
     rsync      # Efficient file transfer/synchronization
     scc          # Code counter
     upower       # Power management
@@ -204,55 +208,4 @@
     typioca      # Typing checker
     wiki-tui     # Wikipedia TUI
   ];
-
-  programs = {
-    zsh.enable = true;
-    hyprland = {
-      enable = true;
-      xwayland.enable = true;
-      systemd.setPath.enable = true;
-    };
-  };
-
-  environment = {
-    pathsToLink = [ "/share/zsh" ];
-    variables = {
-      SSH_ASKPASS = lib.mkForce "$HOME/.config/rofi/scripts/rofi-askpass";
-      SUDO_ASKPASS = lib.mkForce "$HOME/.config/rofi/scripts/rofi-askpass";
-      # Set the custom screenshot directory for grimblast
-      XDG_SCREENSHOTS_DIR="$HOME/Pictures/Screenshots";
-    };
-    sessionVariables = {
-      WLR_NO_HARDWARE_CURSORS = "1";
-    };
-    etc."home/${username}/.config/rofi/scripts/rofi-askpass" = {
-      source = "/home/${username}/.config/rofi/scripts/rofi-askpass";
-      mode = "0755"; # Readable and executable by the owner and others
-    };
-  };
-
-  hardware = {
-    graphics.enable = true;
-  };
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  };
-
-  security = {
-    rtkit.enable = true;
-    pam.services.hyprlock = { };
-  };
-
-  services = {
-    displayManager = {
-      defaultSession = "hyprland";
-      sddm = {
-        enable = true;
-        wayland.enable = true;
-        theme = "sugar-dark";
-      };
-    };
-  };
 }

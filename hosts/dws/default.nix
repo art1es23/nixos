@@ -1,32 +1,54 @@
-{
-  username,
-  ...
-}:
+{ pkgs, lib, username, ... }:
+
 {
   imports = [
     ./hardware-configuration.nix
-    # ./filesystems.nix
-    # ./networking.nix
-    # ./users.nix
-    # ./pkgs.nix
-    # ./containers
-    # ./services
   ];
 
-  boot = {
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-    };
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
   };
 
   time.timeZone = "Europe/Kyiv";
 
   users.users.${username}.home = "/home/${username}";
 
-  services = {
-    xserver = {
+  environment.pathsToLink = [ "/share/zsh" ];
+
+  environment.variables = {
+    SSH_ASKPASS = lib.mkForce "$HOME/.config/rofi/scripts/rofi-askpass";
+    SUDO_ASKPASS = lib.mkForce "$HOME/.config/rofi/scripts/rofi-askpass";
+    XDG_SCREENSHOTS_DIR = "$HOME/Pictures/Screenshots";
+  };
+
+  environment.sessionVariables = {
+    WLR_NO_HARDWARE_CURSORS = "1";
+  };
+
+  environment.etc."home/${username}/.config/rofi/scripts/rofi-askpass" = {
+    source = "/home/${username}/.config/rofi/scripts/rofi-askpass";
+    mode = "0755";
+  };
+
+  hardware = {
+    bluetooth.enable = true;
+    graphics.enable = true;
+    opengl = {
       enable = true;
+    };
+  };
+
+  services = {
+    xserver.enable = true;
+
+    displayManager = {
+      sddm = {
+        enable = true;
+        wayland.enable = true;
+        theme = "sugar-dark";
+      };
+      defaultSession = "hyprland";
     };
 
     pipewire = {
@@ -41,10 +63,23 @@
     pulseaudio.enable = false;
   };
 
-  hardware = {
-    bluetooth.enable = true;
+  programs.zsh.enable = true;
+
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+    systemd.setPath.enable = true;
   };
 
-  security.rtkit.enable = true;
+  security = {
+    rtkit.enable = true;
+    pam.services.hyprlock = {};
+  };
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  };
+
   system.stateVersion = "24.05";
 }

@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./asdf
     ./dunst
     ./gomi
     ./grimblast

@@ -1,0 +1,45 @@
+# ~/.config/asdf/asdfrc
+# ASDF Configuration File
+
+# Enable legacy version file support
+# This allows asdf to read version files from other version managers
+# like .nvmrc, .python-version, .ruby-version, etc.
+legacy_version_file = yes
+
+# Disable automatic reshimming after plugin install/update
+# Set to 'no' if you want to manually run 'asdf reshim' for better performance
+auto_reshim = yes
+
+# Enable plugin repository security
+# Set to 'yes' to only allow plugins from the official plugin repository
+plugin_repository_security = no
+
+# Set the number of cores to use when compiling
+# Leave commented to use all available cores
+# jobs = 4
+
+# Use the system's OpenSSL instead of compiling from source
+# Useful for macOS users to avoid compilation issues
+# use_system_openssl = yes
+
+# Disable telemetry/analytics for plugins that support it
+disable_plugin_analytics = yes
+
+# Set default behavior for 'asdf install' without version
+# 'latest' - install latest version
+# 'system' - use system version
+# Comment out to prompt user
+# default_install_version = latest
+
+# Enable verbose output for debugging
+# Uncomment for troubleshooting
+# verbose = yes
+
+# Set custom plugin directory (optional)
+# plugin_dir = ~/.config/asdf/plugins
+
+# Set custom shims directory (optional)  
+# shims_dir = ~/.config/asdf/shims
+
+# Set custom installs directory (optional)
+# installs_dir = ~/.config/asdf/installs

@@ -1,0 +1,55 @@
+# ~/.config/asdf/tool-versions
+# Global tool versions - these will be used system-wide unless overridden
+# by project-specific .tool-versions files
+
+# Node.js - JavaScript runtime
+nodejs latest
+
+# Python - Programming language
+python latest
+
+# Ruby - Programming language  
+ruby latest
+
+# Go - Programming language
+golang latest
+
+# Rust - Programming language
+rust latest
+
+# Java - Programming language
+java latest
+
+# PHP - Programming language
+php latest
+
+# Deno - JavaScript/TypeScript runtime
+deno latest
+
+# Bun - JavaScript runtime and package manager
+bun latest
+
+# Elixir - Programming language
+elixir latest
+
+# Erlang - Programming language (required for Elixir)
+erlang latest
+
+# Kubectl - Kubernetes CLI
+kubectl latest
+
+# Terraform - Infrastructure as Code
+terraform latest
+
+# Helm - Kubernetes package manager
+helm latest
+
+# NOTE: Install plugins first before uncommenting versions
+# To install a plugin: asdf plugin add <plugin-name>
+# To install a version: asdf install <plugin-name> latest
+# To set global version: asdf global <plugin-name> latest
+
+# Common workflow:
+# 1. asdf plugin add nodejs
+# 2. asdf install nodejs latest  
+# 3. asdf global nodejs latest (or just use the .tool-versions file)

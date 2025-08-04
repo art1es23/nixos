@@ -24,6 +24,7 @@
       ];
 
       env = [
+        "RADV_PERFTEST,llvm"
         "XCURSOR_THEME,Bibata-Modern-Ice"
         "XCURSOR_SIZE,34"                # For screen1 (default scaling)
         "HYPRCURSOR_SIZE,40"             # For screen2 (26 * 1.25 ≈ 32)
